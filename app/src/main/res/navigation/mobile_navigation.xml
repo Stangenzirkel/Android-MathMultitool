@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/calculatorFragment">
+    <fragment
+        android:id="@+id/calculatorFragment"
+        android:name="stangenzirkel.mathmultitool.CalculatorFragment"
+        android:label="fragment_calculator"
+        tools:layout="@layout/fragment_calculator" />
+    <fragment
+        android:id="@+id/converterFragment"
+        android:name="stangenzirkel.mathmultitool.ConvertorFragment"
+        android:label="fragment_converter"
+        tools:layout="@layout/fragment_converter" />
+</navigation>
