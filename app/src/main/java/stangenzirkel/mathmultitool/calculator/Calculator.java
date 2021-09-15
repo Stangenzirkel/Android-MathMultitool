@@ -166,7 +166,8 @@ public class Calculator {
         // for example: 6(6 + 1) or π(1 * 6)
         if (string.equals("(") && expressionParts.size() != 0 &&
                 !(isBinaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        isUnaryOperator(expressionParts.get(expressionParts.size() - 1)))) {
+                        isUnaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
+                        expressionParts.get(expressionParts.size() - 1).equals("("))) {
             Log.d(tag, "String addition failed: can't type \"(\" after digits");
             return false;
         }
