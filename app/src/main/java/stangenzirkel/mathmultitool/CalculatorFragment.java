@@ -64,12 +64,18 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         root.findViewById(R.id.btn_dot).setOnClickListener(this);
         // root.findViewById(R.id.btn_percent).setOnClickListener(this);
 
+        TextView tv_calculator_expression = (TextView) root.findViewById(R.id.tv_calculator_expression);
+        tv_calculator_expression.setText(calculator.getString());
+
+        TextView tv_calculator_result = (TextView) root.findViewById(R.id.tv_calculator_result);
+        tv_calculator_result.setText(calculator.getStringResult());
         return root;
     }
 
     @Override
     public void onClick(View v) {
-        Log.d(tag, "Click");
+        Button button = (Button) v;
+        Log.d(tag, "Click on ".concat((String) button.getText()));
         switch (v.getId()) {
             case R.id.btn_1:
                 calculator.addExpressionPart("1");
@@ -195,16 +201,14 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_dot:
-                calculator.addExpressionPart(".");
+                calculator.addExpressionPart(",");
                 break;
         }
 
         TextView tv_calculator_expression = (TextView) getView().findViewById(R.id.tv_calculator_expression);
         tv_calculator_expression.setText(calculator.getString());
-        Log.d(tag, calculator.getString());
 
         TextView tv_calculator_result = (TextView) getView().findViewById(R.id.tv_calculator_result);
         tv_calculator_result.setText(calculator.getStringResult());
-        Log.d(tag, calculator.getStringResult());
     }
 }
