@@ -6,9 +6,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/calculatorFragment"
+            android:icon="@drawable/ic_calculator"
             android:title="@string/menu_calculator" />
         <item
             android:id="@+id/converterFragment"
+            android:icon="@drawable/ic_baseline_sync_alt_24"
             android:title="@string/menu_converter" />
 
     </group>
