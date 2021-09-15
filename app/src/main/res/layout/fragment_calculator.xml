@@ -181,7 +181,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn7"
+                android:id="@+id/btn_7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -195,7 +195,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/btn8"
+                android:id="@+id/btn_8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -209,7 +209,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button8"
+                android:id="@+id/btn_9"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -223,7 +223,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button9"
+                android:id="@+id/btn_plus"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -237,7 +237,7 @@
                 android:textSize="34sp" />
 
             <Button
-                android:id="@+id/button10"
+                android:id="@+id/btn_minus"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -258,7 +258,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button11"
+                android:id="@+id/btn_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -272,7 +272,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button12"
+                android:id="@+id/btn_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -286,7 +286,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button13"
+                android:id="@+id/btn_6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -300,7 +300,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button14"
+                android:id="@+id/btn_multiplication"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -315,7 +315,7 @@
                 android:textSize="34sp" />
 
             <Button
-                android:id="@+id/button15"
+                android:id="@+id/btn_division"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -336,7 +336,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button16"
+                android:id="@+id/btn_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -350,7 +350,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button17"
+                android:id="@+id/btn_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -364,7 +364,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button18"
+                android:id="@+id/btn_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -378,21 +378,21 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button19"
+                android:id="@+id/btn_exponentiation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
                 android:layout_weight="1"
                 android:backgroundTint="@color/gray_4"
+                android:fontFamily="@font/advent_pro_medium"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:text="^"
                 android:textColor="@color/gray_1"
-                android:textSize="34sp"
-                android:fontFamily="@font/advent_pro_medium" />
+                android:textSize="34sp" />
 
             <Button
-                android:id="@+id/button20"
+                android:id="@+id/btn_root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -413,7 +413,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button21"
+                android:id="@+id/btn_dot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -426,7 +426,7 @@
                 android:textSize="34sp" />
 
             <Button
-                android:id="@+id/button22"
+                android:id="@+id/btn_0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -440,7 +440,7 @@
                 android:textSize="48sp" />
 
             <Button
-                android:id="@+id/button23"
+                android:id="@+id/btn_percent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -454,7 +454,7 @@
                 android:textSize="34sp" />
 
             <Button
-                android:id="@+id/button24"
+                android:id="@+id/btn_result"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -470,33 +470,31 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/caclultor_expression"
+        android:id="@+id/tv_calculator_expression"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="TextView"
         android:textColor="@color/white"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/calculator_result"
+        android:id="@+id/tv_calculator_result"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="TextView"
         android:textColor="@color/gray_1"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/caclultor_expression" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_calculator_expression" />
 
     <Button
-        android:id="@+id/button26"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:id="@+id/btn_rad_deg"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/gray_1"

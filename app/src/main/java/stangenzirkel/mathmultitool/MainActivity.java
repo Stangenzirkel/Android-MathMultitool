@@ -1,6 +1,8 @@
 package stangenzirkel.mathmultitool;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -11,8 +13,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     NavController navController;
+    private String tag = "MainActivityTag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,5 +40,11 @@ public class MainActivity extends AppCompatActivity {
                 .setDrawerLayout(findViewById(R.id.drawer_layout))
                 .build())
                 || super.onSupportNavigateUp();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Log.d(tag, "Click");
     }
 }
