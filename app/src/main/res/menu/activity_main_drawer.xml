@@ -10,7 +10,7 @@
             android:title="@string/menu_calculator" />
         <item
             android:id="@+id/converterFragment"
-            android:icon="@drawable/ic_baseline_sync_alt_24"
+            android:icon="@drawable/ic_converter"
             android:title="@string/menu_converter" />
 
     </group>
