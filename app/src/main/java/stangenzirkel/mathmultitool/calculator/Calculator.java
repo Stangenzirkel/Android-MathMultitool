@@ -17,8 +17,15 @@ public class Calculator {
     private boolean isRadianMod = true;
     public static String tag = "CalculatorTag";
 
+    // TODO remove canTypeSeparator
+    private boolean canTypeSeparator = true;
+
     public Calculator() {
         expressionParts.add("0");
+    }
+
+    private String getLastExpressionPart() {
+        return expressionParts.get(expressionParts.size() - 1);
     }
 
     private boolean isDigit(String s) {
@@ -45,31 +52,26 @@ public class Calculator {
         return result;
     }
 
-    public boolean addExpressionPart(String string) {
+    // TODO refactor addOperator
+    public boolean addOperator(String string) {
         // filtering invalid strings
-        // for example: 5 + aboba
-        if (!(isUnaryOperator(string) ||
-                isBinaryOperator(string) ||
-                isConstant(string) ||
-                isDigit(string) ||
-                string.equals(",") ||
-                string.equals("(") ||
-                string.equals(")"))) {
-            Log.d(tag, "String addition failed: invalid string");
+        if (!isUnaryOperator(string) && !isBinaryOperator(string)) {
+            Log.d(tag, "Operator addition failed: invalid string");
             return false;
         }
 
         // replacing first zero by unary minus
         if (string.equals("-") && expressionParts.size() == 1 && expressionParts.get(0).equals("0")) {
             expressionParts.set(0, "inverse");
-            Log.d(tag, "String addition successful: replacing first zero by unary minus");
+            Log.d(tag, "Operator addition successful: replacing first zero by unary minus");
+            canTypeSeparator = true;
             return true;
         }
 
         // can't type many unary minuses
         // for example: ------5
         if (string.equals("-") && expressionParts.size() != 0 && expressionParts.get(expressionParts.size() - 1).equals("inverse")) {
-            Log.d(tag, "String addition failed: can't type many unary minuses");
+            Log.d(tag, "Operator addition failed: can't type many unary minuses");
             return false;
         }
 
@@ -79,18 +81,20 @@ public class Calculator {
                         isBinaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
                                 isUnaryOperator(expressionParts.get(expressionParts.size() - 1)))) {
             expressionParts.add("inverse");
-            Log.d(tag, "String addition successful: replacing binary minus by unary minus");
+            Log.d(tag, "Operator addition successful: replacing binary minus by unary minus");
+            canTypeSeparator = true;
             return true;
         }
 
         // replacing single zero by digits or unary operators
         // for example: 6 * 0  -> 5 after 5 typed or 6 * 0 -> 6 * sin after sin typed
-        if (expressionParts.size() != 0 && expressionParts.get(expressionParts.size() - 1).equals("0") &&
-                (isDigit(string) || isConstant(string) || isUnaryOperator(string)) &&
+        if (expressionParts.size() != 0 && getLastExpressionPart().equals("0") &&
+                isUnaryOperator(string) &&
                 (expressionParts.size() == 1 || !(isDigit(expressionParts.get(expressionParts.size() - 2)) ||
                         expressionParts.get(expressionParts.size() - 2).equals(",")))) {
             expressionParts.set(expressionParts.size() - 1, string);
-            Log.d(tag, "String addition successful: replacing single zero by digits or unary operators");
+            Log.d(tag, "Operator addition successful: replacing single zero by digits or unary operators");
+            canTypeSeparator = true;
             return true;
         }
 
@@ -100,7 +104,7 @@ public class Calculator {
                 !(isDigit(expressionParts.get(expressionParts.size() - 1)) ||
                         expressionParts.get(expressionParts.size() - 1).equals(")") ||
                         isConstant(expressionParts.get(expressionParts.size() - 1)) )) {
-            Log.d(tag, "String addition failed: can't type binary operator after other operator or \"(\"");
+            Log.d(tag, "Operator addition failed: can't type binary operator after other operator or \"(\"");
             return false;
         }
 
@@ -110,65 +114,115 @@ public class Calculator {
                 !(isUnaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
                         isBinaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
                         expressionParts.get(expressionParts.size() - 1).equals("("))) {
-            Log.d(tag, "String addition failed: can't type unary operator after \")\" or digit");
-            return false;
-        }
-
-        // can't type constant after ")" or digit
-        // for example: ...)e or 5e
-        if (isConstant(string) && expressionParts.size() != 0 &&
-                !(isUnaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        isBinaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        expressionParts.get(expressionParts.size() - 1).equals("("))) {
-            Log.d(tag, "String addition failed: can't type constant after \")\" or digit");
+            Log.d(tag, "Operator addition failed: can't type unary operator after \")\" or digit");
             return false;
         }
 
         // can't type anything except digits after ","
         // for example: 67, * 87,-
         if (expressionParts.get(expressionParts.size() - 1).equals(",") && !isDigit(string)) {
-            Log.d(tag, "String addition failed: can't type anything except digits after \",\"");
+            Log.d(tag, "Operator addition failed: can't type anything except digits after \",\"");
             return false;
         }
 
+
+        Log.d(tag, "Operator addition successful");
+        expressionParts.add(string);
+        canTypeSeparator = true;
+        return true;
+    }
+
+    public boolean addDecimalSeparator() {
         // can't type "," after anything except digits
         // for example: -,
-        if (!isDigit(expressionParts.get(expressionParts.size() - 1)) && string.equals(",")) {
-            Log.d(tag, "String addition failed: can't type \",\" after anything except digits");
+        if (expressionParts.size() == 0 || !isDigit(getLastExpressionPart())) {
+            Log.d(tag, "DecimalSeparator addition failed: can't type \",\" after anything except digits");
             return false;
         }
 
+        if (!canTypeSeparator) {
+            Log.d(tag, "DecimalSeparator addition failed: canTypeSeparator is false");
+            return false;
+        }
+
+        canTypeSeparator = false;
+        Log.d(tag, "DecimalSeparator addition successful");
+        expressionParts.add(",");
+        return true;
+    }
+
+    public boolean addLeftScope() {
         // replacing first zero by left scope added
-        if (expressionParts.size() == 1 && expressionParts.get(0).equals("0") && string.equals("(")) {
-            expressionParts.set(0, string);
-            Log.d(tag, "String addition successful: replacing first zero by left scope added");
+        if (expressionParts.size() == 1 && getLastExpressionPart().equals("0")) {
+            expressionParts.set(0, "(");
+            Log.d(tag, "LeftScope addition successful: replacing first zero by left scope added");
+            canTypeSeparator = true;
             return true;
         }
 
+        // can't type "(" after digits
+        // for example: 6(6 + 1) or π(1 * 6)
+        if (expressionParts.size() != 0 && !(isBinaryOperator(getLastExpressionPart()) ||
+                        isUnaryOperator(getLastExpressionPart()) ||
+                        getLastExpressionPart().equals("("))) {
+            Log.d(tag, "LeftScope addition failed: can't type \"(\" after digits");
+            return false;
+        }
+
+        Log.d(tag, "LeftScope addition successful");
+        expressionParts.add("(");
+        canTypeSeparator = true;
+        return true;
+    }
+
+    public boolean addRightScope() {
         // can't type ")" without "("
         // for example: (1 + 6))
-        if (string.equals(")") && Collections.frequency(expressionParts, "(") <= Collections.frequency(expressionParts, ")")) {
-            Log.d(tag, "String addition failed: can't type \")\" without \"(\"");
+        if (Collections.frequency(expressionParts, "(") <= Collections.frequency(expressionParts, ")")) {
+            Log.d(tag, "RightScope addition failed: can't type \")\" without \"(\"");
             return false;
         }
 
         // can't type ")" after operators or ","
         // for example: (5 + 6,) or (5 + )
-        if (string.equals(")") &&
-                !(expressionParts.get(expressionParts.size() - 1).equals(")") ||
-                isDigit(expressionParts.get(expressionParts.size() - 1)) ||
-                        isConstant(expressionParts.get(expressionParts.size() - 1)))) {
-            Log.d(tag, "String addition failed: can't type \")\" without \"(\"");
+        if (!(getLastExpressionPart().equals(")") ||
+                isDigit(getLastExpressionPart()) ||
+                isConstant(getLastExpressionPart()))) {
+            Log.d(tag, "RightScope addition failed: can't type \")\" without \"(\"");
             return false;
         }
 
-        // can't type "(" after digits
-        // for example: 6(6 + 1) or π(1 * 6)
-        if (string.equals("(") && expressionParts.size() != 0 &&
-                !(isBinaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        isUnaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        expressionParts.get(expressionParts.size() - 1).equals("("))) {
-            Log.d(tag, "String addition failed: can't type \"(\" after digits");
+        Log.d(tag, "RightScope addition successful");
+        expressionParts.add(")");
+        canTypeSeparator = true;
+        return true;
+    }
+
+    public boolean addConstant(String string) {
+        // filtering invalid strings
+        if (!isConstant(string)) {
+            Log.d(tag, "Constant addition failed: invalid string");
+            return false;
+        }
+
+        // replacing single zero
+        if (getLastExpressionPart().equals("0") &&
+                (expressionParts.size() == 1
+                 || !(expressionParts.get(expressionParts.size() - 2).equals(",") ||
+                        isDigit(expressionParts.get(expressionParts.size() - 2))))) {
+            Log.d(tag, "Constant addition successful: replacing single zero");
+            expressionParts.set(expressionParts.size() - 1, string);
+            canTypeSeparator = true;
+            return true;
+        }
+
+        // can't type constant after ")" or digit
+        // for example: ...)e or 5e
+        if (expressionParts.size() != 0 &&
+                !(isUnaryOperator(getLastExpressionPart()) ||
+                        isBinaryOperator(getLastExpressionPart()) ||
+                        getLastExpressionPart().equals("("))) {
+            Log.d(tag, "Constant addition failed: can't type constant after \")\" or digit");
             return false;
         }
 
@@ -179,14 +233,50 @@ public class Calculator {
             return false;
         }
 
+        Log.d(tag, "Constant addition successful");
+        expressionParts.add(string);
+        canTypeSeparator = true;
+        return true;
+    }
 
-        Log.d(tag, "String addition successful");
+    public boolean addDigit(String string) {
+        // filtering invalid strings
+        if (!isDigit(string)) {
+            Log.d(tag, "Digit addition failed: invalid string");
+            return false;
+        }
+
+        // replacing single zero
+        if (getLastExpressionPart().equals("0") &&
+                (expressionParts.size() == 1
+                        || !(expressionParts.get(expressionParts.size() - 2).equals(",") ||
+                        isDigit(expressionParts.get(expressionParts.size() - 2))))) {
+            Log.d(tag, "Digit addition successful: replacing single zero");
+            expressionParts.set(expressionParts.size() - 1, string);
+            return true;
+        }
+
+        Log.d(tag, "Digit addition successful");
         expressionParts.add(string);
         return true;
     }
 
-    public boolean addExpressionPart(String string, int index) {
-        return false;
+    public boolean addExpressionPart(String string) {
+        if (isUnaryOperator(string) || isBinaryOperator(string)) {
+            return addOperator(string);
+        } else if (string.equals(",")) {
+            return addDecimalSeparator();
+        } else if (string.equals("(")) {
+            return addLeftScope();
+        } else if (string.equals(")")) {
+            return addRightScope();
+        } else if (isConstant(string)) {
+            return addConstant(string);
+        } else if (isDigit(string)) {
+            return addDigit(string);
+        } else {
+            return false;
+        }
     }
 
     public double getResult() {
@@ -220,10 +310,14 @@ public class Calculator {
     public void clear() {
         expressionParts.clear();
         expressionParts.add("0");
+        canTypeSeparator = true;
     }
 
     public void clearLast() {
         if (expressionParts.size() != 0) {
+            if (getLastExpressionPart().equals(",")) {
+                canTypeSeparator = true;
+            }
             expressionParts.remove(expressionParts.size() - 1);
         }
 

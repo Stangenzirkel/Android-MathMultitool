@@ -78,43 +78,43 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         Log.d(tag, "Click on ".concat((String) button.getText()));
         switch (v.getId()) {
             case R.id.btn_1:
-                calculator.addExpressionPart("1");
+                calculator.addDigit("1");
                 break;
 
             case R.id.btn_2:
-                calculator.addExpressionPart("2");
+                calculator.addDigit("2");
                 break;
 
             case R.id.btn_3:
-                calculator.addExpressionPart("3");
+                calculator.addDigit("3");
                 break;
 
             case R.id.btn_4:
-                calculator.addExpressionPart("4");
+                calculator.addDigit("4");
                 break;
 
             case R.id.btn_5:
-                calculator.addExpressionPart("5");
+                calculator.addDigit("5");
                 break;
 
             case R.id.btn_6:
-                calculator.addExpressionPart("6");
+                calculator.addDigit("6");
                 break;
 
             case R.id.btn_7:
-                calculator.addExpressionPart("7");
+                calculator.addDigit("7");
                 break;
 
             case R.id.btn_8:
-                calculator.addExpressionPart("8");
+                calculator.addDigit("8");
                 break;
 
             case R.id.btn_9:
-                calculator.addExpressionPart("9");
+                calculator.addDigit("9");
                 break;
 
             case R.id.btn_0:
-                calculator.addExpressionPart("0");
+                calculator.addDigit("0");
                 break;
 
             case R.id.btn_result:
@@ -134,47 +134,47 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_lscope:
-                calculator.addExpressionPart("(");
+                calculator.addLeftScope();
                 break;
 
             case R.id.btn_rscope:
-                calculator.addExpressionPart(")");
+                calculator.addRightScope();
                 break;
 
             case R.id.btn_plus:
-                calculator.addExpressionPart("+");
+                calculator.addOperator("+");
                 break;
 
             case R.id.btn_minus:
-                calculator.addExpressionPart("-");
+                calculator.addOperator("-");
                 break;
 
             case R.id.btn_multiplication:
-                calculator.addExpressionPart("*");
+                calculator.addOperator("*");
                 break;
 
             case R.id.btn_division:
-                calculator.addExpressionPart("/");
+                calculator.addOperator("/");
                 break;
 
             case R.id.btn_exponentiation:
-                calculator.addExpressionPart("^");
+                calculator.addOperator("^");
                 break;
 
             case R.id.btn_root:
-                calculator.addExpressionPart("root");
+                calculator.addOperator("root");
                 break;
 
             case R.id.btn_percent:
-                calculator.addExpressionPart("%");
+                calculator.addOperator("%");
                 break;
 
             case R.id.btn_pi:
-                calculator.addExpressionPart("pi");
+                calculator.addConstant("pi");
                 break;
 
             case R.id.btn_e:
-                calculator.addExpressionPart("e");
+                calculator.addConstant("e");
                 break;
 
             case R.id.btn_mc:
@@ -201,7 +201,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_dot:
-                calculator.addExpressionPart(",");
+                calculator.addDecimalSeparator();
                 break;
         }
 
