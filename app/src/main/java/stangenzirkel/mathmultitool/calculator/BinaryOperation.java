@@ -1,26 +1,12 @@
 package stangenzirkel.mathmultitool.calculator;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-public class BinaryOperation implements ExpressionNode {
-    private ExpressionNode leftNode;
-    private ExpressionNode rightNode;
-    private BiFunction<Double, Double, Double> function;
+public abstract class BinaryOperation implements ExpressionNode {
+    protected ExpressionNode leftNode;
+    protected ExpressionNode rightNode;
 
     BinaryOperation(ExpressionNode leftNode, ExpressionNode rightNode) {
         this.leftNode = leftNode;
         this.rightNode = rightNode;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public double getResult() {
-        return function.apply(leftNode.getResult(), rightNode.getResult());
     }
 
     @Override
@@ -29,7 +15,23 @@ public class BinaryOperation implements ExpressionNode {
     }
 
     public static String[] getAllBinaryOperators() {
-        return new String[] {"-", "+", "*", "/", "^"};
+        return new String[] {"^", "*", "/", "+", "-"};
+    }
+
+    public static int detPriority(String operator) {
+        switch (operator) {
+            case "+": case "-":
+                return 1;
+
+            case "*": case "/":
+                return 2;
+
+            case "^":
+                return 3;
+
+            default:
+                throw new RuntimeException();
+        }
     }
 
     public static BinaryOperation getNode(String operator, ExpressionNode leftNode, ExpressionNode rightNode) {
@@ -56,37 +58,66 @@ public class BinaryOperation implements ExpressionNode {
 }
 
 class Addition extends BinaryOperation {
-    private final BiFunction<Double, Double, Double> function =  (aDouble, aDouble2) -> aDouble + aDouble2;
     Addition(ExpressionNode leftNode, ExpressionNode rightNode) {
         super(leftNode, rightNode);
+    }
+
+    @Override
+    public double getResult() {
+        return leftNode.getResult() + rightNode.getResult();
     }
 }
 
 class Subtraction extends BinaryOperation {
-    private final BiFunction<Double, Double, Double> function =  (aDouble, aDouble2) -> aDouble - aDouble2;
     Subtraction(ExpressionNode leftNode, ExpressionNode rightNode) {
         super(leftNode, rightNode);
+    }
+
+    @Override
+    public double getResult() {
+        return leftNode.getResult() - rightNode.getResult();
     }
 }
 
 class Multiplication extends BinaryOperation {
-    private final BiFunction<Double, Double, Double> function =  (aDouble, aDouble2) -> aDouble * aDouble2;
     Multiplication(ExpressionNode leftNode, ExpressionNode rightNode) {
         super(leftNode, rightNode);
+    }
+
+    @Override
+    public double getResult() {
+        if (rightNode instanceof EmptyNode) {
+            return leftNode.getResult();
+        }
+        return leftNode.getResult() * rightNode.getResult();
     }
 }
 
 class Division extends BinaryOperation {
-    private final BiFunction<Double, Double, Double> function =  (aDouble, aDouble2) -> aDouble / aDouble2;
     Division(ExpressionNode leftNode, ExpressionNode rightNode) {
         super(leftNode, rightNode);
+    }
+
+    @Override
+    public double getResult() {
+        if (rightNode instanceof EmptyNode) {
+            return leftNode.getResult();
+        }
+        return leftNode.getResult() / rightNode.getResult();
     }
 }
 
 class Exponentiation extends BinaryOperation {
-    private final BiFunction<Double, Double, Double> function = Math::pow;
     Exponentiation(ExpressionNode leftNode, ExpressionNode rightNode) {
         super(leftNode, rightNode);
+    }
+
+    @Override
+    public double getResult() {
+        if (rightNode instanceof EmptyNode) {
+            return leftNode.getResult();
+        }
+        return Math.pow(leftNode.getResult(), rightNode.getResult());
     }
 }
 

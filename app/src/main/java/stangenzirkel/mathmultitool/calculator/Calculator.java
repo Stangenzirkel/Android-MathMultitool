@@ -127,11 +127,11 @@ public class Calculator {
         return true;
     }
 
-    public boolean addLeftScope() {
-        // replacing first zero by left scope added
+    public boolean addLeftBracket() {
+        // replacing first zero by left Bracket added
         if (expressionParts.size() == 1 && getLastExpressionPart().equals("0")) {
             expressionParts.set(0, "(");
-            Log.d(tag, "LeftScope addition successful: replacing first zero by left scope added");
+            Log.d(tag, "LeftBracket addition successful: replacing first zero by left Bracket added");
             canTypeSeparator = true;
             return true;
         }
@@ -141,21 +141,21 @@ public class Calculator {
         if (expressionParts.size() != 0 && !(ExpressionNode.isBinaryOperator(getLastExpressionPart()) ||
                 ExpressionNode.isUnaryOperator(getLastExpressionPart()) ||
                         getLastExpressionPart().equals("("))) {
-            Log.d(tag, "LeftScope addition failed: can't type \"(\" after digits");
+            Log.d(tag, "LeftBracket addition failed: can't type \"(\" after digits");
             return false;
         }
 
-        Log.d(tag, "LeftScope addition successful");
+        Log.d(tag, "LeftBracket addition successful");
         expressionParts.add("(");
         canTypeSeparator = true;
         return true;
     }
 
-    public boolean addRightScope() {
+    public boolean addRightBracket() {
         // can't type ")" without "("
         // for example: (1 + 6))
         if (Collections.frequency(expressionParts, "(") <= Collections.frequency(expressionParts, ")")) {
-            Log.d(tag, "RightScope addition failed: can't type \")\" without \"(\"");
+            Log.d(tag, "RightBracket addition failed: can't type \")\" without \"(\"");
             return false;
         }
 
@@ -164,11 +164,11 @@ public class Calculator {
         if (!(getLastExpressionPart().equals(")") ||
                 ExpressionNode.isDigit(getLastExpressionPart()) ||
                 ExpressionNode.isConstant(getLastExpressionPart()))) {
-            Log.d(tag, "RightScope addition failed: can't type \")\" without \"(\"");
+            Log.d(tag, "RightBracket addition failed: can't type \")\" without \"(\"");
             return false;
         }
 
-        Log.d(tag, "RightScope addition successful");
+        Log.d(tag, "RightBracket addition successful");
         expressionParts.add(")");
         canTypeSeparator = true;
         return true;
@@ -243,9 +243,9 @@ public class Calculator {
         } else if (string.equals(".")) {
             return addDecimalSeparator();
         } else if (string.equals("(")) {
-            return addLeftScope();
+            return addLeftBracket();
         } else if (string.equals(")")) {
-            return addRightScope();
+            return addRightBracket();
         } else if (ExpressionNode.isConstant(string)) {
             return addConstant(string);
         } else if (ExpressionNode.isDigit(string)) {
@@ -260,7 +260,12 @@ public class Calculator {
     }
 
     public String getStringResult() {
-        return Double.toString(getResult());
+        try {
+            return Double.toString(getResult());
+        } catch (Throwable e) {
+            return "Error";
+        }
+
     }
 
     public double getM() {

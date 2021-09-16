@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 import stangenzirkel.mathmultitool.calculator.Calculator;
 
 public class CalculatorFragment extends Fragment implements View.OnClickListener {
@@ -51,8 +48,8 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         root.findViewById(R.id.btn_mplus).setOnClickListener(this);
         root.findViewById(R.id.btn_mminus).setOnClickListener(this);
         root.findViewById(R.id.btn_mr).setOnClickListener(this);
-        root.findViewById(R.id.btn_lscope).setOnClickListener(this);
-        root.findViewById(R.id.btn_rscope).setOnClickListener(this);
+        root.findViewById(R.id.btn_left_bracket).setOnClickListener(this);
+        root.findViewById(R.id.btn_right_bracket).setOnClickListener(this);
         root.findViewById(R.id.btn_pi).setOnClickListener(this);
         root.findViewById(R.id.btn_e).setOnClickListener(this);
         root.findViewById(R.id.btn_plus).setOnClickListener(this);
@@ -119,6 +116,9 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
             case R.id.btn_result:
                 String result = calculator.getStringResult();
+                if (result.endsWith(".0")) {
+                    result = result.replace(".0", "");
+                }
                 calculator.clear();
                 for (char elem: result.toCharArray()) {
                     calculator.addExpressionPart(String.valueOf(elem));
@@ -133,12 +133,12 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 calculator.clearLast();
                 break;
 
-            case R.id.btn_lscope:
-                calculator.addLeftScope();
+            case R.id.btn_left_bracket:
+                calculator.addLeftBracket();
                 break;
 
-            case R.id.btn_rscope:
-                calculator.addRightScope();
+            case R.id.btn_right_bracket:
+                calculator.addRightBracket();
                 break;
 
             case R.id.btn_plus:
