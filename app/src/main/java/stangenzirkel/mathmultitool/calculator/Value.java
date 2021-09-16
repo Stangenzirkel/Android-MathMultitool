@@ -20,7 +20,7 @@ class Value implements ExpressionNode {
         return new ExpressionNode[0];
     }
 
-    static Map<String, Double> getConstant() {
+    static Map<String, Double> getAllConstantsMap() {
         Map<String, Double> constant = new HashMap<>();
         constant.put("pi", Math.PI);
         constant.put("e", Math.E);
