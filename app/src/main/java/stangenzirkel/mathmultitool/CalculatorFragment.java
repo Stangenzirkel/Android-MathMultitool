@@ -178,15 +178,34 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_mc:
+                calculator.setBuffer(0);
                 break;
 
             case R.id.btn_mplus:
+                try {
+                    calculator.setBuffer(calculator.getBuffer() + calculator.getResult());
+                } catch (Throwable e) {
+                    Log.d(tag, "M+ failed");
+                }
                 break;
 
             case R.id.btn_mminus:
+                try {
+                    calculator.setBuffer(calculator.getBuffer() - calculator.getResult());
+                } catch (Throwable e) {
+                    Log.d(tag, "M- failed");
+                }
                 break;
 
             case R.id.btn_mr:
+                String string = Double.toString(calculator.getBuffer());
+                if (string.endsWith(".0")) {
+                    string = string.replace(".0", "");
+                }
+
+                for (String s: string.split("")) {
+                    calculator.addExpressionPart(s);
+                }
                 break;
 
             case R.id.btn_rad_deg:

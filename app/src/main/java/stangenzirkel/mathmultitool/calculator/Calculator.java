@@ -268,12 +268,16 @@ public class Calculator {
 
     }
 
-    public double getM() {
+    public double getBuffer() {
         return buffer;
     }
 
+    public void setBuffer(double value) {
+        buffer = value;
+    }
+
     public String getStringM() {
-        return Double.toString(getM());
+        return Double.toString(getBuffer());
     }
 
     public String getString() {
