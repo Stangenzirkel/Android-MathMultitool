@@ -491,7 +491,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_rtg"
+                android:id="@+id/btn_rtd"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/btn_margin"
@@ -502,7 +502,7 @@
                 android:insetBottom="0dp"
                 android:text="rad to deg"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btn_f1"
@@ -514,7 +514,6 @@
                 android:fontFamily="@font/arimo"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="f"
                 android:textColor="@color/gray_1"
                 android:textSize="48sp" />
 
@@ -545,7 +544,7 @@
                 android:insetBottom="0dp"
                 android:text="sin"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btn_asin"
@@ -559,7 +558,7 @@
                 android:insetBottom="0dp"
                 android:text="asin"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -581,7 +580,7 @@
                 android:insetBottom="0dp"
                 android:text="deg to rad"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btn_f2"
@@ -593,7 +592,6 @@
                 android:fontFamily="@font/arimo"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="f"
                 android:textColor="@color/gray_1"
                 android:textSize="48sp" />
 
@@ -625,7 +623,7 @@
                 android:text="cos"
                 android:textAllCaps="true"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btn_acos"
@@ -639,7 +637,7 @@
                 android:insetBottom="0dp"
                 android:text="acos"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -659,7 +657,6 @@
                 android:fontFamily="@font/arimo"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="f"
                 android:textColor="@color/gray_1"
                 android:textSize="48sp" />
 
@@ -673,7 +670,6 @@
                 android:fontFamily="@font/arimo"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="f"
                 android:textColor="@color/gray_1"
                 android:textSize="48sp" />
 
@@ -703,7 +699,7 @@
                 android:insetBottom="0dp"
                 android:text="tan"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btn_atan"
@@ -717,7 +713,7 @@
                 android:insetBottom="0dp"
                 android:text="atan"
                 android:textColor="@color/gray_1"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout

@@ -25,6 +25,12 @@ interface ExpressionNode {
         return result;
     }
 
+    static boolean isRightUnaryOperator(String s) {
+        boolean result = Arrays.asList(RightUnaryOperation.getAllUnaryOperators()).contains(s);
+        Log.d(tag, "isRightUnaryOperator arg: ".concat(s).concat(" result: ").concat(Boolean.toString(result)));
+        return result;
+    }
+
     static boolean isBinaryOperator(String s) {
         boolean result = Arrays.asList(BinaryOperation.getAllBinaryOperators()).contains(s);
         Log.d(tag, "isBinaryOperator arg: ".concat(s).concat(" result: ").concat(Boolean.toString(result)));
@@ -70,12 +76,17 @@ interface ExpressionNode {
                     bracketLevel++;
                 } else if (cursor.equals(")")) {
                     bracketLevel--;
-                } else if (isUnaryOperator(cursor)) {
+                } else if (bracketLevel == 0 && isRightUnaryOperator(cursor)) {
                     if (operator == null) {
                         operator = cursor;
                         index = i;
                     }
-                } else if (isBinaryOperator(cursor)) {
+                } else if (bracketLevel == 0 && isUnaryOperator(cursor)) {
+                    if (operator == null || isRightUnaryOperator(operator)) {
+                        operator = cursor;
+                        index = i;
+                    }
+                } else if (bracketLevel == 0 && isBinaryOperator(cursor)) {
                     if (operator == null ||
                             isUnaryOperator(operator) ||
                             isBinaryOperator(operator) &&
@@ -100,6 +111,9 @@ interface ExpressionNode {
             if (operator == null) {
                 // removes one bracket level
                 return ExpressionNode.parse(Arrays.copyOfRange(expressionParts, 1, expressionParts.length - 1));
+            } else if (isRightUnaryOperator(operator)) {
+                return RightUnaryOperation.getNode(operator,
+                        ExpressionNode.parse(Arrays.copyOfRange(expressionParts, 0, index)));
             } else if (isUnaryOperator(operator)) {
                 return UnaryOperation.getNode(operator,
                         ExpressionNode.parse(Arrays.copyOfRange(expressionParts, index + 1, expressionParts.length)));

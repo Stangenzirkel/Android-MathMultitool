@@ -79,7 +79,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         root.findViewById(R.id.btn_acos).setOnClickListener(this);
         root.findViewById(R.id.btn_atan).setOnClickListener(this);
 
-        root.findViewById(R.id.btn_rtg).setOnClickListener(this);
+        root.findViewById(R.id.btn_rtd).setOnClickListener(this);
         root.findViewById(R.id.btn_dtr).setOnClickListener(this);
         root.findViewById(R.id.btn_lg).setOnClickListener(this);
         root.findViewById(R.id.btn_ln).setOnClickListener(this);
@@ -219,16 +219,70 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 calculator.addOperator("root");
                 break;
 
-            case R.id.btn_percent:
-                calculator.addOperator("%");
-                break;
-
             case R.id.btn_pi:
                 calculator.addConstant("pi");
                 break;
 
             case R.id.btn_e:
                 calculator.addConstant("e");
+                break;
+
+            case R.id.btn_percent:
+                calculator.addOperator("%");
+                break;
+
+            case R.id.btn_factorial:
+                calculator.addOperator("!");
+                break;
+
+            case R.id.btn_sin:
+                calculator.addOperator("sin");
+                break;
+
+            case R.id.btn_cos:
+                calculator.addOperator("cos");
+                break;
+
+            case R.id.btn_tan:
+                calculator.addOperator("tan");
+                break;
+
+            case R.id.btn_asin:
+                calculator.addOperator("asin");
+                break;
+
+            case R.id.btn_acos:
+                calculator.addOperator("acos");
+                break;
+
+            case R.id.btn_atan:
+                calculator.addOperator("atan");
+                break;
+
+            case R.id.btn_lg:
+                calculator.addOperator("lg");
+                break;
+
+            case R.id.btn_ln:
+                calculator.addOperator("ln");
+                break;
+
+            case R.id.btn_rtd:
+                calculator.addOperator("rtd");
+                break;
+
+            case R.id.btn_dtr:
+                calculator.addOperator("dtr");
+                break;
+
+            case R.id.btn_10exp:
+                if (calculator.addDigit("1") && calculator.addDigit("0")) {
+                    calculator.addOperator("^");
+                }
+                break;
+
+            case R.id.btn_dot:
+                calculator.addDecimalSeparator();
                 break;
 
             case R.id.btn_mc:
@@ -271,10 +325,6 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 } else {
                     btn.setText("rad");
                 }
-                break;
-
-            case R.id.btn_dot:
-                calculator.addDecimalSeparator();
                 break;
         }
 

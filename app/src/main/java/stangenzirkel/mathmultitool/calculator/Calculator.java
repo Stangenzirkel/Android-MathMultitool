@@ -28,41 +28,47 @@ public class Calculator {
         return expressionParts.get(expressionParts.size() - 1);
     }
 
-    // TODO refactor addOperator
+    // TODO refactor this
     public boolean addOperator(String string) {
         // filtering invalid strings
-        if (!ExpressionNode.isUnaryOperator(string) && !ExpressionNode.isBinaryOperator(string)) {
+        if (!ExpressionNode.isUnaryOperator(string) &&
+                !ExpressionNode.isBinaryOperator(string) &&
+                !ExpressionNode.isRightUnaryOperator(string)) {
             Log.d(tag, "Operator addition failed: invalid string");
             return false;
         }
 
-        // replacing first zero by unary minus
-        if (string.equals("-") && expressionParts.size() == 1 && expressionParts.get(0).equals("0")) {
-            expressionParts.set(0, "inverse");
-            Log.d(tag, "Operator addition successful: replacing first zero by unary minus");
-            canTypeSeparator = true;
-            return true;
+        // TODO refactor this
+        if (string.equals("-")) {
+            // replacing first zero by unary minus
+            if (expressionParts.size() == 1 && expressionParts.get(0).equals("0")) {
+                expressionParts.set(0, "inverse");
+                Log.d(tag, "Operator addition successful: replacing first zero by unary minus");
+                canTypeSeparator = true;
+                return true;
+            }
+
+            // can't type many unary minuses
+            // for example: ------5
+            if (expressionParts.size() != 0 && getLastExpressionPart().equals("inverse")) {
+                Log.d(tag, "Operator addition failed: can't type many unary minuses");
+                return false;
+            }
+
+            // replacing binary minus by unary minus
+            if (expressionParts.size() != 0 &&
+                    (getLastExpressionPart().equals("(") ||
+                            ExpressionNode.isBinaryOperator(getLastExpressionPart()) ||
+                            ExpressionNode.isUnaryOperator(getLastExpressionPart()))) {
+                expressionParts.add("inverse");
+                Log.d(tag, "Operator addition successful: replacing binary minus by unary minus");
+                canTypeSeparator = true;
+                return true;
+            }
         }
 
-        // can't type many unary minuses
-        // for example: ------5
-        if (string.equals("-") && expressionParts.size() != 0 && expressionParts.get(expressionParts.size() - 1).equals("inverse")) {
-            Log.d(tag, "Operator addition failed: can't type many unary minuses");
-            return false;
-        }
 
-        // replacing binary minus by unary minus
-        if (string.equals("-") && expressionParts.size() != 0 &&
-                (expressionParts.get(expressionParts.size() - 1).equals("(") ||
-                        ExpressionNode.isBinaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        ExpressionNode.isUnaryOperator(expressionParts.get(expressionParts.size() - 1)))) {
-            expressionParts.add("inverse");
-            Log.d(tag, "Operator addition successful: replacing binary minus by unary minus");
-            canTypeSeparator = true;
-            return true;
-        }
-
-        // replacing single zero by digits or unary operators
+        // replacing single zero by unary operators
         // for example: 6 * 0  -> 5 after 5 typed or 6 * 0 -> 6 * sin after sin typed
         if (expressionParts.size() != 0 && getLastExpressionPart().equals("0") &&
                 ExpressionNode.isUnaryOperator(string) &&
@@ -77,9 +83,10 @@ public class Calculator {
         // can't type binary operator after other operator or "("
         // for example: 5+++1 or sin * 5 or (+7)
         if (ExpressionNode.isBinaryOperator(string) && expressionParts.size() != 0 &&
-                !(ExpressionNode.isDigit(expressionParts.get(expressionParts.size() - 1)) ||
-                        expressionParts.get(expressionParts.size() - 1).equals(")") ||
-                        ExpressionNode.isConstant(expressionParts.get(expressionParts.size() - 1)) )) {
+                !(ExpressionNode.isDigit(getLastExpressionPart()) ||
+                        getLastExpressionPart().equals(")") ||
+                        ExpressionNode.isConstant(getLastExpressionPart()) ||
+                        ExpressionNode.isRightUnaryOperator(getLastExpressionPart()))) {
             Log.d(tag, "Operator addition failed: can't type binary operator after other operator or \"(\"");
             return false;
         }
@@ -87,16 +94,26 @@ public class Calculator {
         // can't type unary operator after ")" or digit
         // for example: ...)sin10 or 5sin6
         if (ExpressionNode.isUnaryOperator(string) && expressionParts.size() != 0 &&
-                !(ExpressionNode.isUnaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        ExpressionNode.isBinaryOperator(expressionParts.get(expressionParts.size() - 1)) ||
-                        expressionParts.get(expressionParts.size() - 1).equals("("))) {
+                !(ExpressionNode.isUnaryOperator(getLastExpressionPart()) ||
+                        ExpressionNode.isBinaryOperator(getLastExpressionPart()) ||
+                        getLastExpressionPart().equals("("))) {
             Log.d(tag, "Operator addition failed: can't type unary operator after \")\" or digit");
+            return false;
+        }
+
+        // can't type right unary operator after "(" or another operator
+        // for example: ...)sin10 or 5sin6
+        if (ExpressionNode.isRightUnaryOperator(string) && expressionParts.size() != 0 &&
+                !(ExpressionNode.isDigit(getLastExpressionPart()) ||
+                        ExpressionNode.isRightUnaryOperator(getLastExpressionPart()) ||
+                        getLastExpressionPart().equals(")"))) {
+            Log.d(tag, "Operator addition failed: can't type right unary operator after \"(\" or another operator");
             return false;
         }
 
         // can't type anything except digits after "."
         // for example: 67, * 87,-
-        if (expressionParts.get(expressionParts.size() - 1).equals(".") && !ExpressionNode.isDigit(string)) {
+        if (getLastExpressionPart().equals(".") && !ExpressionNode.isDigit(string)) {
             Log.d(tag, "Operator addition failed: can't type anything except digits after \",\"");
             return false;
         }
@@ -163,6 +180,7 @@ public class Calculator {
         // for example: (5 + 6,) or (5 + )
         if (!(getLastExpressionPart().equals(")") ||
                 ExpressionNode.isDigit(getLastExpressionPart()) ||
+                ExpressionNode.isRightUnaryOperator(getLastExpressionPart()) ||
                 ExpressionNode.isConstant(getLastExpressionPart()))) {
             Log.d(tag, "RightBracket addition failed: can't type \")\" without \"(\"");
             return false;
@@ -202,13 +220,6 @@ public class Calculator {
             return false;
         }
 
-        // can't digit after constant
-        // for example: e6
-        if (ExpressionNode.isDigit(string) && expressionParts.size() != 0 && ExpressionNode.isConstant(expressionParts.get(expressionParts.size() - 1))) {
-            Log.d(tag, "String addition failed: can't digit after constant");
-            return false;
-        }
-
         Log.d(tag, "Constant addition successful");
         expressionParts.add(string);
         canTypeSeparator = true;
@@ -224,12 +235,21 @@ public class Calculator {
 
         // replacing single zero
         if (getLastExpressionPart().equals("0") &&
-                (expressionParts.size() == 1
-                        || !(expressionParts.get(expressionParts.size() - 2).equals(".") ||
+                (expressionParts.size() == 1 ||
+                        !(expressionParts.get(expressionParts.size() - 2).equals(".") ||
                         ExpressionNode.isDigit(expressionParts.get(expressionParts.size() - 2))))) {
             Log.d(tag, "Digit addition successful: replacing single zero");
             expressionParts.set(expressionParts.size() - 1, string);
             return true;
+        }
+
+        // can't digit after constant
+        // for example: e6
+        if (ExpressionNode.isDigit(string) && expressionParts.size() != 0 &&
+                (ExpressionNode.isConstant(getLastExpressionPart()) ||
+                        ExpressionNode.isRightUnaryOperator(getLastExpressionPart()))) {
+            Log.d(tag, "String addition failed: can't digit after constant");
+            return false;
         }
 
         Log.d(tag, "Digit addition successful");
@@ -289,7 +309,9 @@ public class Calculator {
         return builder.toString()
                 .replace("pi", "π")
                 .replace("root", "√")
-                .replace("inverse", "-");
+                .replace("inverse", "-")
+                .replace("rdt", "deg")
+                .replace("dtr", "rad");
     }
 
     public void clear() {
