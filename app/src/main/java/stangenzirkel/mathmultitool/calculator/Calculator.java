@@ -312,7 +312,7 @@ public class Calculator {
                 .replace("pi", "π")
                 .replace("root", "√")
                 .replace("inverse", "-")
-                .replace("rdt", "deg")
+                .replace("rtd", "deg")
                 .replace("dtr", "rad");
     }
 

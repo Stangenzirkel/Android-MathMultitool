@@ -11,6 +11,7 @@
         android:id="@+id/calculator_keyboard"
         android:layout_width="match_parent"
         android:layout_height="500dp"
+        android:layout_marginTop="20dp"
         android:maxHeight="500dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

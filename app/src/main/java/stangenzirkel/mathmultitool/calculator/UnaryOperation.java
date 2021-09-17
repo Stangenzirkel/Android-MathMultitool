@@ -24,7 +24,7 @@ public abstract class UnaryOperation extends ExpressionNode {
                 "atan",
                 "lg",
                 "ln",
-                "rtg",
+                "rtd",
                 "dtr"};
     }
 
