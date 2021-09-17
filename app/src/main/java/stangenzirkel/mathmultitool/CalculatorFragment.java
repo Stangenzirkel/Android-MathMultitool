@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import stangenzirkel.mathmultitool.calculator.Calculator;
 
@@ -287,11 +288,13 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
             case R.id.btn_mc:
                 calculator.setBuffer(0);
+                Toast.makeText(getContext(), "Memory cleared", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_mplus:
                 try {
                     calculator.setBuffer(calculator.getBuffer() + calculator.getResult());
+                    Toast.makeText(getContext(), "Result added to memory", Toast.LENGTH_SHORT).show();
                 } catch (Throwable e) {
                     Log.d(tag, "M+ failed");
                 }
@@ -300,6 +303,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
             case R.id.btn_mminus:
                 try {
                     calculator.setBuffer(calculator.getBuffer() - calculator.getResult());
+                    Toast.makeText(getContext(), "Result subtracted from memory", Toast.LENGTH_SHORT).show();
                 } catch (Throwable e) {
                     Log.d(tag, "M- failed");
                 }
@@ -314,6 +318,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 for (String s: string.split("")) {
                     calculator.addExpressionPart(s);
                 }
+                Toast.makeText(getContext(), "Memory result", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_rad_deg: //TODO add deg/rad mods to calculator
