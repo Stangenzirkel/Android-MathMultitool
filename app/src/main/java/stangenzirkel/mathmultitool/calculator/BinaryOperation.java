@@ -1,6 +1,6 @@
 package stangenzirkel.mathmultitool.calculator;
 
-public abstract class BinaryOperation implements ExpressionNode {
+public abstract class BinaryOperation extends ExpressionNode {
     protected ExpressionNode leftNode;
     protected ExpressionNode rightNode;
 
@@ -55,6 +55,20 @@ public abstract class BinaryOperation implements ExpressionNode {
                 throw new RuntimeException();
         }
     }
+
+    abstract double function(double a, double b);
+
+    @Override
+    public double getResult() {
+        ExpressionNode a = leftNode;
+        ExpressionNode b = rightNode;
+        a.setParameters(parameters);
+        b.setParameters(parameters);
+        if (b instanceof EmptyNode) {
+            return leftNode.getResult();
+        }
+        return function(a.getResult(), b.getResult());
+    }
 }
 
 class Addition extends BinaryOperation {
@@ -63,8 +77,8 @@ class Addition extends BinaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return leftNode.getResult() + rightNode.getResult();
+    double function(double a, double b) {
+        return a + b;
     }
 }
 
@@ -74,8 +88,8 @@ class Subtraction extends BinaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return leftNode.getResult() - rightNode.getResult();
+    double function(double a, double b) {
+        return a - b;
     }
 }
 
@@ -85,11 +99,8 @@ class Multiplication extends BinaryOperation {
     }
 
     @Override
-    public double getResult() {
-        if (rightNode instanceof EmptyNode) {
-            return leftNode.getResult();
-        }
-        return leftNode.getResult() * rightNode.getResult();
+    double function(double a, double b) {
+        return a * b;
     }
 }
 
@@ -99,11 +110,8 @@ class Division extends BinaryOperation {
     }
 
     @Override
-    public double getResult() {
-        if (rightNode instanceof EmptyNode) {
-            return leftNode.getResult();
-        }
-        return leftNode.getResult() / rightNode.getResult();
+    double function(double a, double b) {
+        return a / b;
     }
 }
 
@@ -113,11 +121,8 @@ class Exponentiation extends BinaryOperation {
     }
 
     @Override
-    public double getResult() {
-        if (rightNode instanceof EmptyNode) {
-            return leftNode.getResult();
-        }
-        return Math.pow(leftNode.getResult(), rightNode.getResult());
+    double function(double a, double b) {
+        return Math.pow(a, b);
     }
 }
 

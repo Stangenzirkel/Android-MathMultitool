@@ -276,7 +276,9 @@ public class Calculator {
     }
 
     public double getResult() {
-        return ExpressionNode.parse(expressionParts.toArray(new String[expressionParts.size()])).getResult();
+        ExpressionNode expressionNode = ExpressionNode.parse(expressionParts.toArray(new String[expressionParts.size()]));
+        expressionNode.putParameter("isRadianMod", Boolean.toString(isRadianMod()));
+        return expressionNode.getResult();
     }
 
     public String getStringResult() {

@@ -24,26 +24,24 @@ abstract public class RightUnaryOperation extends UnaryOperation {
 }
 
 class Percent extends RightUnaryOperation {
-
     Percent(ExpressionNode node) {
         super(node);
     }
 
     @Override
-    public double getResult() {
-        return node.getResult() / 100;
+    double function(double a) {
+        return a / 100;
     }
 }
 
 class Factorial extends RightUnaryOperation {
-
     Factorial(ExpressionNode node) {
         super(node);
     }
 
     @Override
-    public double getResult() {
-        double n = (int) node.getResult();
+    double function(double a) {
+        double n = (int) a;
         double result = 1;
 
         for (int i = 1; i <= n; i++) {

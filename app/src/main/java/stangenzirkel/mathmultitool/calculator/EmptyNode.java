@@ -1,6 +1,6 @@
 package stangenzirkel.mathmultitool.calculator;
 
-public class EmptyNode implements ExpressionNode{
+public class EmptyNode extends ExpressionNode{
     @Override
     public double getResult() {
         return 0;

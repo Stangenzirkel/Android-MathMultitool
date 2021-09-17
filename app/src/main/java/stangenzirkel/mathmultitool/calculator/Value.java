@@ -3,7 +3,7 @@ package stangenzirkel.mathmultitool.calculator;
 import java.util.HashMap;
 import java.util.Map;
 
-class Value implements ExpressionNode {
+class Value extends ExpressionNode {
     private double value;
 
     public Value(double value) {

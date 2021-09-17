@@ -2,11 +2,15 @@ package stangenzirkel.mathmultitool.calculator;
 
 import android.util.Log;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import stangenzirkel.mathmultitool.usefulfunctions.UsefulFunctions;
 
-interface ExpressionNode {
-    String tag = Calculator.tag;
+abstract class ExpressionNode {
+    final static String tag = Calculator.tag;
+    protected Map<String, String> parameters = new HashMap<>();
+
     static boolean isDigit(String s) {
         boolean result = Arrays.asList(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}).contains(s);
         Log.d(tag, "isDigit arg: ".concat(s).concat(" result: ").concat(Boolean.toString(result)));
@@ -134,7 +138,15 @@ interface ExpressionNode {
         return new Value(0);
     }
 
-    double getResult();
+    public void putParameter(String parameter, String value) {
+        parameters.put(parameter, value);
+    }
 
-    ExpressionNode[] getNodes();
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
+
+    abstract double getResult();
+
+    abstract ExpressionNode[] getNodes();
 }

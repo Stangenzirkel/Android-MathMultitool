@@ -1,6 +1,6 @@
 package stangenzirkel.mathmultitool.calculator;
 
-public abstract class UnaryOperation implements ExpressionNode {
+public abstract class UnaryOperation extends ExpressionNode {
     protected ExpressionNode node;
     // private Function<Double, Double> function;
 
@@ -71,6 +71,15 @@ public abstract class UnaryOperation implements ExpressionNode {
                 throw new RuntimeException();
         }
     }
+
+    @Override
+    double getResult() {
+        ExpressionNode node = this.node;
+        node.setParameters(parameters);
+        return function(node.getResult());
+    }
+
+    abstract double function(double a);
 }
 
 class Inverse extends UnaryOperation {
@@ -79,8 +88,8 @@ class Inverse extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return -node.getResult();
+    double function(double a) {
+        return -a;
     }
 }
 
@@ -90,8 +99,8 @@ class SqRt extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.sqrt(node.getResult());
+    double function(double a) {
+        return Math.sqrt(a);
     }
 }
 
@@ -101,8 +110,11 @@ class Sin extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.sin(node.getResult());
+    double function(double a) {
+        if (parameters.containsKey("isRadianMod") && !Boolean.valueOf(parameters.get("isRadianMod"))) {
+            a = Math.toRadians(a);
+        }
+        return Math.sin(a);
     }
 }
 
@@ -112,8 +124,11 @@ class Cos extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.cos(node.getResult());
+    double function(double a) {
+        if (parameters.containsKey("isRadianMod") && !Boolean.valueOf(parameters.get("isRadianMod"))) {
+            a = Math.toRadians(a);
+        }
+        return Math.cos(a);
     }
 }
 
@@ -123,8 +138,11 @@ class Tan extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.tan(node.getResult());
+    double function(double a) {
+        if (parameters.containsKey("isRadianMod") && !Boolean.valueOf(parameters.get("isRadianMod"))) {
+            a = Math.toRadians(a);
+        }
+        return Math.tan(a);
     }
 }
 
@@ -134,8 +152,8 @@ class ASin extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.asin(node.getResult());
+    double function(double a) {
+        return Math.asin(a);
     }
 }
 
@@ -145,8 +163,8 @@ class ACos extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.acos(node.getResult());
+    double function(double a) {
+        return Math.acos(a);
     }
 }
 
@@ -156,8 +174,8 @@ class ATan extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.atan(node.getResult());
+    double function(double a) {
+        return Math.atan(a);
     }
 }
 
@@ -167,8 +185,8 @@ class Lg extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.log10(node.getResult());
+    double function(double a) {
+        return Math.log10(a);
     }
 }
 
@@ -178,8 +196,8 @@ class Ln extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.log(node.getResult());
+    double function(double a) {
+        return Math.log(a);
     }
 }
 
@@ -189,8 +207,8 @@ class RadToDeg extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.toDegrees(node.getResult());
+    double function(double a) {
+        return Math.toDegrees(a);
     }
 }
 
@@ -200,8 +218,8 @@ class DegToRad extends UnaryOperation {
     }
 
     @Override
-    public double getResult() {
-        return Math.toRadians(node.getResult());
+    double function(double a) {
+        return Math.toRadians(a);
     }
 }
 
