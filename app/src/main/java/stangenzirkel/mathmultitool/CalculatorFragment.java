@@ -17,9 +17,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     private Calculator calculator = new Calculator();
     private String tag = "CalculatorFragmentTag";
 
-    public CalculatorFragment() {
-
-    }
+    public CalculatorFragment() {}
 
     public static CalculatorFragment newInstance() {
         CalculatorFragment fragment = new CalculatorFragment();
@@ -30,6 +28,17 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_calculator, container, false);
+
+        root.findViewById(R.id.kl_3b).setVisibility(View.GONE);
+        root.findViewById(R.id.kl_4b).setVisibility(View.GONE);
+        root.findViewById(R.id.kl_5b).setVisibility(View.GONE);
+        root.findViewById(R.id.kl_6b).setVisibility(View.GONE);
+
+        root.findViewById(R.id.btn_rad_deg).setOnClickListener(this);
+
+        root.findViewById(R.id.btn_main_keyboard).setOnClickListener(this);
+        root.findViewById(R.id.btn_function_keyboard).setOnClickListener(this);
+
         root.findViewById(R.id.btn_0).setOnClickListener(this);
         root.findViewById(R.id.btn_1).setOnClickListener(this);
         root.findViewById(R.id.btn_2).setOnClickListener(this);
@@ -40,18 +49,21 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         root.findViewById(R.id.btn_7).setOnClickListener(this);
         root.findViewById(R.id.btn_8).setOnClickListener(this);
         root.findViewById(R.id.btn_9).setOnClickListener(this);
+
         root.findViewById(R.id.btn_c).setOnClickListener(this);
         root.findViewById(R.id.btn_del).setOnClickListener(this);
         root.findViewById(R.id.btn_result).setOnClickListener(this);
-        root.findViewById(R.id.btn_rad_deg).setOnClickListener(this);
+
         root.findViewById(R.id.btn_mc).setOnClickListener(this);
         root.findViewById(R.id.btn_mplus).setOnClickListener(this);
         root.findViewById(R.id.btn_mminus).setOnClickListener(this);
         root.findViewById(R.id.btn_mr).setOnClickListener(this);
+
         root.findViewById(R.id.btn_left_bracket).setOnClickListener(this);
         root.findViewById(R.id.btn_right_bracket).setOnClickListener(this);
         root.findViewById(R.id.btn_pi).setOnClickListener(this);
         root.findViewById(R.id.btn_e).setOnClickListener(this);
+
         root.findViewById(R.id.btn_plus).setOnClickListener(this);
         root.findViewById(R.id.btn_minus).setOnClickListener(this);
         root.findViewById(R.id.btn_multiplication).setOnClickListener(this);
@@ -59,6 +71,26 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         root.findViewById(R.id.btn_exponentiation).setOnClickListener(this);
         root.findViewById(R.id.btn_root).setOnClickListener(this);
         root.findViewById(R.id.btn_dot).setOnClickListener(this);
+
+        root.findViewById(R.id.btn_sin).setOnClickListener(this);
+        root.findViewById(R.id.btn_cos).setOnClickListener(this);
+        root.findViewById(R.id.btn_tan).setOnClickListener(this);
+        root.findViewById(R.id.btn_asin).setOnClickListener(this);
+        root.findViewById(R.id.btn_acos).setOnClickListener(this);
+        root.findViewById(R.id.btn_atan).setOnClickListener(this);
+
+        root.findViewById(R.id.btn_rtg).setOnClickListener(this);
+        root.findViewById(R.id.btn_dtr).setOnClickListener(this);
+        root.findViewById(R.id.btn_lg).setOnClickListener(this);
+        root.findViewById(R.id.btn_ln).setOnClickListener(this);
+        root.findViewById(R.id.btn_10exp).setOnClickListener(this);
+        root.findViewById(R.id.btn_percent).setOnClickListener(this);
+        root.findViewById(R.id.btn_factorial).setOnClickListener(this);
+
+        root.findViewById(R.id.btn_f1).setOnClickListener(this);
+        root.findViewById(R.id.btn_f2).setOnClickListener(this);
+        root.findViewById(R.id.btn_f3).setOnClickListener(this);
+        root.findViewById(R.id.btn_f4).setOnClickListener(this);
         // root.findViewById(R.id.btn_percent).setOnClickListener(this);
 
         TextView tv_calculator_expression = (TextView) root.findViewById(R.id.tv_calculator_expression);
@@ -74,6 +106,28 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         Button button = (Button) v;
         Log.d(tag, "Click on ".concat((String) button.getText()));
         switch (v.getId()) {
+            case R.id.btn_main_keyboard:
+                getView().findViewById(R.id.kl_3b).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_4b).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_5b).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_6b).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_3).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.kl_4).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.kl_5).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.kl_6).setVisibility(View.VISIBLE);
+                break;
+
+            case R.id.btn_function_keyboard:
+                getView().findViewById(R.id.kl_3).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_4).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_5).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_6).setVisibility(View.GONE);
+                getView().findViewById(R.id.kl_3b).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.kl_4b).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.kl_5b).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.kl_6b).setVisibility(View.VISIBLE);
+                break;
+
             case R.id.btn_1:
                 calculator.addDigit("1");
                 break;
@@ -114,7 +168,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 calculator.addDigit("0");
                 break;
 
-            case R.id.btn_result:
+            case R.id.btn_result: case R.id.btn_resultb:
                 String result = calculator.getStringResult();
                 if (result.endsWith(".0")) {
                     result = result.replace(".0", "");
@@ -208,7 +262,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 }
                 break;
 
-            case R.id.btn_rad_deg:
+            case R.id.btn_rad_deg: //TODO add deg/rad mods to calculator
                 calculator.setRadianMod(!calculator.isRadianMod());
 
                 Button btn = (Button) getView().findViewById(R.id.btn_rad_deg);
