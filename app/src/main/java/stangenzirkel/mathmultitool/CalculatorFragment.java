@@ -174,14 +174,14 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 if (result.endsWith(".0")) {
                     result = result.replace(".0", "");
                 }
-                calculator.clear();
+                calculator.clearAll();
                 for (char elem: result.toCharArray()) {
                     calculator.addExpressionPart(String.valueOf(elem));
                 }
                 break;
 
             case R.id.btn_c:
-                calculator.clear();
+                calculator.clearAll();
                 break;
 
             case R.id.btn_del:
@@ -292,22 +292,16 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_mplus:
-                try {
-                    calculator.setBuffer(calculator.getBuffer() + calculator.getResult());
+                if (calculator.addToBuffer()) {
                     Toast.makeText(getContext(), "Result added to memory", Toast.LENGTH_SHORT).show();
-                } catch (Throwable e) {
-                    Log.d(tag, "M+ failed");
                 }
+
                 break;
 
             case R.id.btn_mminus:
-                try {
-                    calculator.setBuffer(calculator.getBuffer() - calculator.getResult());
+                if (calculator.subtractFromBuffer()) {
                     Toast.makeText(getContext(), "Result subtracted from memory", Toast.LENGTH_SHORT).show();
-                } catch (Throwable e) {
-                    Log.d(tag, "M- failed");
                 }
-                break;
 
             case R.id.btn_mr:
                 String string = Double.toString(calculator.getBuffer());

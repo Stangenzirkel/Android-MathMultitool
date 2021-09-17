@@ -2,6 +2,7 @@ package stangenzirkel.mathmultitool.calculator;
 
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
+// TODO add db
 public class Calculator {
     private List<String> expressionParts = new ArrayList<>();
     private double buffer = 0;
@@ -275,7 +277,7 @@ public class Calculator {
         }
     }
 
-    public double getResult() {
+    private double getResult() {
         ExpressionNode expressionNode = ExpressionNode.parse(expressionParts.toArray(new String[expressionParts.size()]));
         expressionNode.putParameter("isRadianMod", Boolean.toString(isRadianMod()));
         return expressionNode.getResult();
@@ -298,6 +300,26 @@ public class Calculator {
         buffer = value;
     }
 
+    public boolean addToBuffer() {
+        try {
+            buffer += getResult();
+            return true;
+        } catch (Throwable e) {
+            Log.d(tag, "M+ failed");
+            return false;
+        }
+    }
+
+    public boolean subtractFromBuffer() {
+        try {
+            buffer -= getResult();
+            return true;
+        } catch (Throwable e) {
+            Log.d(tag, "M- failed");
+            return false;
+        }
+    }
+
     public String getStringM() {
         return Double.toString(getBuffer());
     }
@@ -316,7 +338,7 @@ public class Calculator {
                 .replace("dtr", "rad");
     }
 
-    public void clear() {
+    public void clearAll() {
         expressionParts.clear();
         expressionParts.add("0");
         canTypeSeparator = true;
