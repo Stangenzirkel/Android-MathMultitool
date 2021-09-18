@@ -1,6 +1,8 @@
 package stangenzirkel.mathmultitool;
 
+import android.app.Activity;
 import android.content.Context;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,9 +18,7 @@ import android.widget.TextView;
 
 import stangenzirkel.mathmultitool.converter.Converter;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-public class ConverterFragment extends Fragment implements View.OnClickListener, View.OnKeyListener {
+public class ConverterFragment extends Fragment implements View.OnClickListener {
     private Converter converter = Converter.getInstance();
     private int mod = 0; // 0 - converter; 1 - input ns; 2 - result ns
     public static final String tag = "ConverterFragmentTag";
@@ -51,7 +51,7 @@ public class ConverterFragment extends Fragment implements View.OnClickListener,
         tv = getView().findViewById(R.id.tv_converter_result);
         tv.setText(converter.getStringResult());
 
-        closeNumericKeyboard();
+        switchToMainKeyboard();
     };
 
     private void openNumericKeyboard() {
@@ -60,22 +60,36 @@ public class ConverterFragment extends Fragment implements View.OnClickListener,
         getView().findViewById(R.id.textView3).setVisibility(View.VISIBLE);
     }
 
-    private void closeNumericKeyboard() {
+    private void switchToMainKeyboard() {
         getView().findViewById(R.id.converter_keyboard).setVisibility(View.VISIBLE);
         getView().findViewById(R.id.numeral_keyboard).setVisibility(View.GONE);
         getView().findViewById(R.id.textView3).setVisibility(View.GONE);
     }
 
-    private void openKeyboard() {
-        closeNumericKeyboard();
-    }
-
-    private void closeKeyboard() {
+    private void closeMainKeyboard() {
         getView().findViewById(R.id.converter_keyboard).setVisibility(View.GONE);
         getView().findViewById(R.id.numeral_keyboard).setVisibility(View.GONE);
         getView().findViewById(R.id.textView3).setVisibility(View.GONE);
     }
 
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        // closeMainKeyboard();
+    }
+
+    // TODO
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = getActivity().getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(getActivity());
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        // switchToMainKeyboard();
+    }
 
 
     public ConverterFragment() {
@@ -189,12 +203,11 @@ public class ConverterFragment extends Fragment implements View.OnClickListener,
 
             case R.id.btn_cancel:
                 mod = 0;
-                closeNumericKeyboard();
+                switchToMainKeyboard();
                 break;
 
             case R.id.btn_keyboard:
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                showKeyboard();
                 break;
         }
         TextView tv = getView().findViewById(R.id.tv_converter_input);
@@ -204,14 +217,18 @@ public class ConverterFragment extends Fragment implements View.OnClickListener,
         tv.setText(converter.getStringResult());
     }
 
-    public boolean onKey(int keyCode, KeyEvent event) {
-        Log.d(tag, "Key clicked. Code = ".concat(String.valueOf(keyCode)));
-        return false;
-    }
+    public boolean onKeyboardKey(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_DEL) {
+            converter.clearLast();
+        } else if (keyCode==KeyEvent.KEYCODE_ENTER) {
+            hideKeyboard();
+        }
+        Converter.getInstance().addString(String.valueOf((char) event.getUnicodeChar()));
+        TextView tv = getView().findViewById(R.id.tv_converter_input);
+        tv.setText(converter.getInputString());
 
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        Log.d(tag, "Key clicked. Code = ".concat(String.valueOf(keyCode)));
+        tv = getView().findViewById(R.id.tv_converter_result);
+        tv.setText(converter.getStringResult());
         return false;
     }
 }

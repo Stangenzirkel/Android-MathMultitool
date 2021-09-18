@@ -51,10 +51,10 @@ public class Converter {
     public boolean addString(String string) {
         for (String partOfString: string.split("")) {
             if (isDigit(partOfString)) {
-                numberChars.add(partOfString);
+                numberChars.add(partOfString.toUpperCase());
                 Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
-            } else if (string.equals(",") && !numberChars.contains(",")) {
-                numberChars.add(partOfString);
+            } else if ((string.equals(".") || string.equals(",")) && !numberChars.contains(",")) {
+                numberChars.add(",");
                 Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
             } else {
                 return false;

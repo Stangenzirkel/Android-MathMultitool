@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -56,7 +57,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.d(tag, "Key clicked. Code = ".concat(String.valueOf(keyCode)));
 
-        Converter.getInstance().addString(String.valueOf((char) event.getUnicodeChar()));
+        androidx.navigation.fragment.NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        if  (navHostFragment != null) {
+            Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+            if (fragment instanceof ConverterFragment) {
+                Log.d(tag, "fragment instanceof ConverterFragment");
+                ((ConverterFragment) fragment).onKeyboardKey(keyCode, event);
+            } else if (fragment != null) {
+                Log.d(tag, "fragment instanceof ".concat(fragment.getClass().getName()));
+            } else {
+                Log.d(tag, "fr == null");
+            }
+        }
+
         return super.onKeyDown(keyCode, event);
     }
 }
