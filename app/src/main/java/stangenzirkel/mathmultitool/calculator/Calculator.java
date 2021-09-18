@@ -12,9 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
+import stangenzirkel.mathmultitool.usefulfunctions.UsefulFunctions;
+
 // TODO add db
 public class Calculator {
-    private List<String> expressionParts = new ArrayList<>();
+    private static final Calculator instance = new Calculator();
+    private final List<String> expressionParts = new ArrayList<>();
     private double buffer = 0;
     private boolean isRadianMod = true;
     public static String tag = "CalculatorTag";
@@ -22,8 +25,12 @@ public class Calculator {
     // TODO remove canTypeSeparator
     private boolean canTypeSeparator = true;
 
-    public Calculator() {
+    private Calculator() {
         expressionParts.add("0");
+    }
+
+    public static Calculator getInstanse() {
+        return instance;
     }
 
     private String getLastExpressionPart() {
@@ -324,13 +331,14 @@ public class Calculator {
         return Double.toString(getBuffer());
     }
 
-    public String getString() {
-        StringBuilder builder = new StringBuilder();
-        for(String s : expressionParts) {
-            builder.append(s);
+    public String getInputString() {
+        if (expressionParts.size() == 0) {
+            return "Enter here";
         }
 
-        return builder.toString()
+        String string = UsefulFunctions.joinString(expressionParts);
+
+        return string
                 .replace("pi", "π")
                 .replace("root", "√")
                 .replace("inverse", "-")

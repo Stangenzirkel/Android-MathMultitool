@@ -1,10 +1,28 @@
 package stangenzirkel.mathmultitool.converter;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import stangenzirkel.mathmultitool.ConverterFragment;
+import stangenzirkel.mathmultitool.usefulfunctions.UsefulFunctions;
+
 public class Converter {
-    private List<String> numberChars = new ArrayList<>();
+    private final static Converter instance = new Converter();
+    private final List<String> numberChars = new ArrayList<>();
+    private int input_ns = 10;
+    private int result_ns = 10;
+
+    public static Converter getInstance() {
+        return instance;
+    }
+
+    private Converter() {
+
+    };
 
     private static boolean isDigit(String string) {
         return getDigitValue(string) != -1;
@@ -34,8 +52,10 @@ public class Converter {
         for (String partOfString: string.split("")) {
             if (isDigit(partOfString)) {
                 numberChars.add(partOfString);
+                Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
             } else if (string.equals(",") && !numberChars.contains(",")) {
                 numberChars.add(partOfString);
+                Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
             } else {
                 return false;
             }
@@ -54,15 +74,43 @@ public class Converter {
         }
     }
 
+    public String getInputString() {
+        if (numberChars.size() == 0) {
+            return "Enter here";
+        }
+        return UsefulFunctions.joinString(numberChars);
+    }
+
     public String getStringResult() {
         if (numberChars.size() == 0) {
             return "Result";
         }
 
         try {
+            // TODO
             return "0";
         } catch (Throwable e) {
             return "Error";
+        }
+    }
+
+    public int getResultNumeralSystem() {
+        return result_ns;
+    }
+
+    public void setResultNumeralSystem(int value) {
+        if (1 < value && value < 37) {
+            this.result_ns = value;
+        }
+    }
+
+    public int getInputNumeralSystem() {
+        return input_ns;
+    }
+
+    public void setInputNumeralSystem(int value) {
+        if (1 < value && value < 37) {
+            this.input_ns = value;
         }
     }
 }

@@ -15,8 +15,8 @@ import android.widget.Toast;
 import stangenzirkel.mathmultitool.calculator.Calculator;
 
 public class CalculatorFragment extends Fragment implements View.OnClickListener {
-    private Calculator calculator = new Calculator();
-    private String tag = "CalculatorFragmentTag";
+    private Calculator calculator = Calculator.getInstanse();
+    private static final String tag = "CalculatorFragmentTag";
 
     public CalculatorFragment() {}
 
@@ -94,11 +94,11 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         root.findViewById(R.id.btn_f4).setOnClickListener(this);
         // root.findViewById(R.id.btn_percent).setOnClickListener(this);
 
-        TextView tv_calculator_expression = (TextView) root.findViewById(R.id.tv_calculator_expression);
-        tv_calculator_expression.setText(calculator.getString());
+        TextView tv = root.findViewById(R.id.tv_calculator_expression);
+        tv.setText(calculator.getInputString());
 
-        TextView tv_calculator_result = (TextView) root.findViewById(R.id.tv_calculator_result);
-        tv_calculator_result.setText(calculator.getStringResult());
+        tv = root.findViewById(R.id.tv_calculator_result);
+        tv.setText(calculator.getStringResult());
         return root;
     }
 
@@ -327,10 +327,10 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 break;
         }
 
-        TextView tv_calculator_expression = (TextView) getView().findViewById(R.id.tv_calculator_expression);
-        tv_calculator_expression.setText(calculator.getString());
+        TextView tv = getView().findViewById(R.id.tv_calculator_expression);
+        tv.setText(calculator.getInputString());
 
-        TextView tv_calculator_result = (TextView) getView().findViewById(R.id.tv_calculator_result);
-        tv_calculator_result.setText(calculator.getStringResult());
+        tv = getView().findViewById(R.id.tv_calculator_result);
+        tv.setText(calculator.getStringResult());
     }
 }

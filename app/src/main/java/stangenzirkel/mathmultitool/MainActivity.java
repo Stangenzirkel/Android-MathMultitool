@@ -2,16 +2,21 @@ package stangenzirkel.mathmultitool;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
+import stangenzirkel.mathmultitool.converter.Converter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     NavController navController;
@@ -22,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
         setSupportActionBar(findViewById(R.id.toolbar));
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -46,5 +50,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Log.d(tag, "Click");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.d(tag, "Key clicked. Code = ".concat(String.valueOf(keyCode)));
+
+        Converter.getInstance().addString(String.valueOf((char) event.getUnicodeChar()));
+        return super.onKeyDown(keyCode, event);
     }
 }

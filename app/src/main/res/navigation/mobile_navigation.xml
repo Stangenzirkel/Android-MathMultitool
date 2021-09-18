@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_calculator" />
     <fragment
         android:id="@+id/converterFragment"
-        android:name="stangenzirkel.mathmultitool.ConvertorFragment"
+        android:name="stangenzirkel.mathmultitool.ConverterFragment"
         android:label="Converter"
         tools:layout="@layout/fragment_converter" />
 </navigation>
