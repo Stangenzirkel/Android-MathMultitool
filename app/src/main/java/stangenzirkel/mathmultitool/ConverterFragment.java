@@ -2,7 +2,6 @@ package stangenzirkel.mathmultitool;
 
 import android.app.Activity;
 import android.content.Context;
-import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +14,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import stangenzirkel.mathmultitool.converter.Converter;
 
@@ -36,12 +38,13 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
             Log.d(tag, "New system = ".concat(Integer.toString(converter.getInputNumeralSystem())));
             Button button1 = getView().findViewById(R.id.btn_numeral_system_input);
             button1.setText(Integer.toString(converter.getInputNumeralSystem()));
+            disableButtons();
         } else if (mod == 2) {
             Log.d(tag, "Current system = ".concat(Integer.toString(converter.getResultNumeralSystem())));
             converter.setResultNumeralSystem(system);
             Log.d(tag, "New system = ".concat(Integer.toString(converter.getResultNumeralSystem())));
             Button button1 = getView().findViewById(R.id.btn_numeral_system_result);
-            button.setText(Integer.toString(converter.getResultNumeralSystem()));
+            button1.setText(Integer.toString(converter.getResultNumeralSystem()));
         }
 
 
@@ -49,7 +52,7 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
         tv.setText(converter.getInputString());
 
         tv = getView().findViewById(R.id.tv_converter_result);
-        tv.setText(converter.getStringResult());
+        tv.setText(converter.getResultString());
 
         switchToMainKeyboard();
     };
@@ -76,6 +79,43 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         // closeMainKeyboard();
+    }
+
+    private void disableButtons() {
+        updateFragment(getView());
+    }
+
+    private void updateFragment (View root) {
+        Button buttonInput = root.findViewById(R.id.btn_numeral_system_input);
+        buttonInput.setText(Integer.toString(converter.getInputNumeralSystem()));
+
+        Button buttonResult = root.findViewById(R.id.btn_numeral_system_result);
+        buttonResult.setText(Integer.toString(converter.getResultNumeralSystem()));
+
+        List<Button> buttons = new ArrayList<>();
+        buttons.add(root.findViewById(R.id.btn_0));
+        buttons.add(root.findViewById(R.id.btn_1));
+        buttons.add(root.findViewById(R.id.btn_2));
+        buttons.add(root.findViewById(R.id.btn_3));
+        buttons.add(root.findViewById(R.id.btn_4));
+        buttons.add(root.findViewById(R.id.btn_5));
+        buttons.add(root.findViewById(R.id.btn_6));
+        buttons.add(root.findViewById(R.id.btn_7));
+        buttons.add(root.findViewById(R.id.btn_8));
+        buttons.add(root.findViewById(R.id.btn_9));
+        buttons.add(root.findViewById(R.id.btn_a));
+        buttons.add(root.findViewById(R.id.btn_b));
+        buttons.add(root.findViewById(R.id.btn_c));
+        buttons.add(root.findViewById(R.id.btn_d));
+        buttons.add(root.findViewById(R.id.btn_e));
+        buttons.add(root.findViewById(R.id.btn_f));
+
+        for (int i = 0; i < 16; i++) {
+            buttons.get(i).setEnabled(true);
+        }
+        for (int i = 15; i >= converter.getInputNumeralSystem(); i--) {
+            buttons.get(i).setEnabled(false);
+        }
     }
 
     // TODO
@@ -182,9 +222,10 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
         tv.setText(converter.getInputString());
 
         tv = root.findViewById(R.id.tv_converter_result);
-        tv.setText(converter.getStringResult());
+        tv.setText(converter.getResultString());
 
         root.findViewById(R.id.converter_keyboard).setVisibility(View.VISIBLE);
+        updateFragment(root);
         return root;
     }
 
@@ -209,12 +250,88 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
             case R.id.btn_keyboard:
                 showKeyboard();
                 break;
+
+            case R.id.btn_0:
+                converter.addString("0");
+                break;
+
+            case R.id.btn_1:
+                converter.addString("1");
+                break;
+
+            case R.id.btn_2:
+                converter.addString("2");
+                break;
+
+            case R.id.btn_3:
+                converter.addString("3");
+                break;
+
+            case R.id.btn_4:
+                converter.addString("4");
+                break;
+
+            case R.id.btn_5:
+                converter.addString("5");
+                break;
+
+            case R.id.btn_6:
+                converter.addString("6");
+                break;
+
+            case R.id.btn_7:
+                converter.addString("7");
+                break;
+
+            case R.id.btn_8:
+                converter.addString("8");
+                break;
+
+            case R.id.btn_9:
+                converter.addString("9");
+                break;
+
+            case R.id.btn_a:
+                converter.addString("a");
+                break;
+
+            case R.id.btn_b:
+                converter.addString("b");
+                break;
+
+            case R.id.btn_c:
+                converter.addString("c");
+                break;
+
+            case R.id.btn_d:
+                converter.addString("d");
+                break;
+
+            case R.id.btn_e:
+                converter.addString("e");
+                break;
+
+            case R.id.btn_f:
+                converter.addString("f");
+                break;
+
+            case R.id.btn_dot:
+                converter.addString(",");
+                break;
+
+            case R.id.btn_del:
+                converter.clearLast();
+                break;
+
+            case R.id.btn_ca:
+                converter.clearAll();
+                break;
         }
         TextView tv = getView().findViewById(R.id.tv_converter_input);
         tv.setText(converter.getInputString());
 
         tv = getView().findViewById(R.id.tv_converter_result);
-        tv.setText(converter.getStringResult());
+        tv.setText(converter.getResultString());
     }
 
     public boolean onKeyboardKey(int keyCode, KeyEvent event) {
@@ -228,7 +345,7 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
         tv.setText(converter.getInputString());
 
         tv = getView().findViewById(R.id.tv_converter_result);
-        tv.setText(converter.getStringResult());
+        tv.setText(converter.getResultString());
         return false;
     }
 }
