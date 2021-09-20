@@ -189,8 +189,9 @@ public class Converter {
                 if (getInputNumeralSystem() == 10) {
                     inputFractionalPartIn10NS = Double.parseDouble("0.".concat(inputFractionalPartString));
                 } else {
-                    solutionParts.add(new SolutionPart(String.format(Locale.getDefault(),"Converting fractional part from numeric system with base %d to numeric system with base 10:",
-                            getInputNumeralSystem())));
+                    SolutionPart solutionPart3 = new SolutionPart(String.format(Locale.getDefault(),"Converting fractional part from numeric system with base %d to numeric system with base 10:",
+                            getInputNumeralSystem()));
+
 
                     inputFractionalPartIn10NS = 0;
                     for (int i = 0; i < inputFractionalPartString.length(); i++) {
@@ -201,24 +202,49 @@ public class Converter {
                         if (!isDigit(substring) || substringValue >= getInputNumeralSystem()) {
                             throw new RuntimeException("invalid char in expression: ".concat(substring));
                         }
+                        solutionPart3.addLine(String.format(Locale.getDefault(), "%f + %d * %d ^ %d",
+                                inputFractionalPartIn10NS,
+                                substringValue,
+                                getInputNumeralSystem(),
+                                -i - 1));
                         inputFractionalPartIn10NS += substringValue * Math.pow(getInputNumeralSystem(), -i - 1);
                     }
+                    solutionPart3.addLine("");
+                    solutionPart3.addLine(String.format(Locale.getDefault(), "Result is %f", inputFractionalPartIn10NS));
+                    solutionParts.add(solutionPart3);
                 }
 
                 // converting fractional part in numeric system with base 10 to result numeric system
                 if (getResultNumeralSystem() == 10) {
                     result = result.concat(Double.toString(inputFractionalPartIn10NS).substring(1));
                 } else {
-                    solutionParts.add(new SolutionPart(String.format(Locale.getDefault(),"Converting fractional part from numeric system with base 10 to numeric system with base %d:",
-                            getResultNumeralSystem())));
+                    SolutionPart solutionPart4 = new SolutionPart(String.format(Locale.getDefault(),"Converting fractional part from numeric system with base 10 to numeric system with base %d:",
+                            getResultNumeralSystem()));
 
                     result = result.concat(".");
                     for (int i = 0; i < 6; i++) {
-                        Log.d(tag, Double.toString(inputFractionalPartIn10NS * getResultNumeralSystem()));
-                        result = result.concat(Integer.toString((int) (inputFractionalPartIn10NS * getResultNumeralSystem())));
+                        // Log.d(tag, Double.toString(inputFractionalPartIn10NS * getResultNumeralSystem()));
+                        solutionPart4.addLine(String.format(Locale.getDefault(), "integer part of %f * %d = %d (%s) result is %s(%s)",
+                                inputFractionalPartIn10NS,
+                                getResultNumeralSystem(),
+                                (int) (inputFractionalPartIn10NS * getResultNumeralSystem()),
+                                getDigitByValue((int) (inputFractionalPartIn10NS * getResultNumeralSystem())),
+                                result,
+                                getDigitByValue((int) (inputFractionalPartIn10NS * getResultNumeralSystem()))));
+
+                        result = result.concat(getDigitByValue((int) (inputFractionalPartIn10NS * getResultNumeralSystem())));
                         inputFractionalPartIn10NS = (inputFractionalPartIn10NS * getResultNumeralSystem()) % 1;
 
+                        solutionPart4.addLine(String.format(Locale.getDefault(), "fractional part = %f", inputFractionalPartIn10NS));
+
                     }
+                    solutionPart4.addLine("");
+                    solutionPart4.addLine(String.format(Locale.getDefault(), "Result is %s", result));
+                    solutionParts.add(solutionPart4);
+                }
+
+                while (result.endsWith("0")) {
+                    result = result.substring(0, result.length() - 1);
                 }
             }
 
