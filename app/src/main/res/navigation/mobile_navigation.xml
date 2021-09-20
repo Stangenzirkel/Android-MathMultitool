@@ -16,4 +16,9 @@
         android:name="stangenzirkel.mathmultitool.ConverterFragment"
         android:label="Converter"
         tools:layout="@layout/fragment_converter" />
+    <fragment
+        android:id="@+id/solutionFragment"
+        android:name="stangenzirkel.mathmultitool.SolutionFragment"
+        android:label="fragment_solution_item_list"
+        tools:layout="@layout/fragment_solution_item_list" />
 </navigation>

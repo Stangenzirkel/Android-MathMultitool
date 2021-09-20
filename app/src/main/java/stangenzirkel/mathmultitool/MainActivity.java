@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import stangenzirkel.mathmultitool.converter.Converter;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ConverterFragment.Callback {
     NavController navController;
     private String tag = "MainActivityTag";
 
@@ -72,5 +72,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onConverterFragmentSolutionButtonClick() {
+        navController.navigate(R.id.solutionFragment);
     }
 }

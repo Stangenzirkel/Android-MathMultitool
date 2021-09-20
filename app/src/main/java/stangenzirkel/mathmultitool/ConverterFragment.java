@@ -57,6 +57,10 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
         switchToMainKeyboard();
     };
 
+    interface Callback {
+        void onConverterFragmentSolutionButtonClick();
+    }
+
     private void openNumericKeyboard() {
         getView().findViewById(R.id.converter_keyboard).setVisibility(View.GONE);
         getView().findViewById(R.id.numeral_keyboard).setVisibility(View.VISIBLE);
@@ -231,6 +235,7 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
+        Callback activity = (Callback) getActivity();
         switch (v.getId()) {
             case R.id.btn_numeral_system_input:
                 mod = 1;
@@ -325,6 +330,13 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
 
             case R.id.btn_ca:
                 converter.clearAll();
+                break;
+
+            case R.id.btn_solution:
+                if (activity != null) {
+                    activity.onConverterFragmentSolutionButtonClick();
+                }
+
                 break;
         }
         TextView tv = getView().findViewById(R.id.tv_converter_input);

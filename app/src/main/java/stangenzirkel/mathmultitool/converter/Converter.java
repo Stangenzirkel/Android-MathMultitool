@@ -3,8 +3,6 @@ package stangenzirkel.mathmultitool.converter;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import stangenzirkel.mathmultitool.ConverterFragment;
@@ -110,16 +108,15 @@ public class Converter {
 
             // converting input to string
             String input = UsefulFunctions.joinString(numberChars);
-
             if (input.endsWith(".")) {
                 input = input.replace(".", "");
             } else if (input.endsWith(".0")) {
                 input = input.replace(".0", "");
             }
 
-            if (getInputNumeralSystem() == getResultNumeralSystem()) {
-                result = input;
-            }
+//            if (getInputNumeralSystem() == getResultNumeralSystem()) {
+//                result = input;
+//            }
 
             // converting integer part
             // converting integer part in input numeric system to 10 numeric system
@@ -166,6 +163,8 @@ public class Converter {
                     for (int i = 0; i < inputFractionalPartString.length(); i++) {
                         String substring = Character.toString(inputFractionalPartString.charAt(i));
                         int substringValue = getDigitValue(substring);
+
+
                         if (!isDigit(substring) || substringValue >= getInputNumeralSystem()) {
                             throw new RuntimeException("invalid char in expression: ".concat(substring));
                         }
