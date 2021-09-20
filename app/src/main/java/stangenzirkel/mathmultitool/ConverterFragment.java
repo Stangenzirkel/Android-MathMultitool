@@ -333,7 +333,7 @@ public class ConverterFragment extends Fragment implements View.OnClickListener 
                 break;
 
             case R.id.btn_solution:
-                if (activity != null) {
+                if (activity != null && converter.getSolution().size() != 0) {
                     activity.onConverterFragmentSolutionButtonClick();
                 }
 

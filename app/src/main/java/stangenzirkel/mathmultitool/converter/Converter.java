@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import stangenzirkel.mathmultitool.ConverterFragment;
 import stangenzirkel.mathmultitool.usefulfunctions.UsefulFunctions;
@@ -15,13 +16,13 @@ public class Converter {
     private int result_ns = 10;
     final static private String tag = ConverterFragment.tag;
 
+    private List<SolutionPart> solutionParts = new ArrayList<>();
+
     public static Converter getInstance() {
         return instance;
     }
 
-    private Converter() {
-
-    };
+    private Converter() {};
 
     private static boolean isDigit(String string) {
         return getDigitValue(string) != -1;
@@ -98,14 +99,13 @@ public class Converter {
     }
 
     public String getResultString() {
+        clearSolution();
         if (numberChars.size() == 0) {
             return "Result";
         }
 
         // method works with strings but input stored as ArrayList<String>
         try {
-            String result = "0";
-
             // converting input to string
             String input = UsefulFunctions.joinString(numberChars);
             if (input.endsWith(".")) {
@@ -114,17 +114,23 @@ public class Converter {
                 input = input.replace(".0", "");
             }
 
+            String result;
+
 //            if (getInputNumeralSystem() == getResultNumeralSystem()) {
 //                result = input;
 //            }
 
             // converting integer part
-            // converting integer part in input numeric system to 10 numeric system
+            // converting integer part to numeric system with base 10
             String inputIntegerPartString = input.split("\\.")[0];
             int inputIntegerPartIn10NS;
             if (getInputNumeralSystem() == 10) {
                 inputIntegerPartIn10NS = Integer.parseInt(inputIntegerPartString);
+            } else if (input.equals("0")) {
+                inputIntegerPartIn10NS = 0;
             } else {
+                SolutionPart solutionPart1 = new SolutionPart(String.format(Locale.getDefault(),"Converting integer part from numeric system with base %d to numeric system with base 10:",
+                        getInputNumeralSystem()));
                 inputIntegerPartIn10NS = 0;
                 for (int i = 0; i < inputIntegerPartString.length(); i++) {
                     String substring = Character.toString(inputIntegerPartString.charAt(i));
@@ -132,33 +138,60 @@ public class Converter {
                     if (!isDigit(substring) || substringValue >= getInputNumeralSystem()) {
                         throw new RuntimeException("invalid char in expression: ".concat(substring));
                     }
+                    solutionPart1.addLine(String.format(Locale.getDefault(), "%d + %d * %d ^ %d = %d",
+                            inputIntegerPartIn10NS,
+                            substringValue,
+                            getInputNumeralSystem(),
+                            inputIntegerPartString.length() - i - 1,
+                            inputIntegerPartIn10NS + substringValue * (int) Math.pow(getInputNumeralSystem(), inputIntegerPartString.length() - i - 1)));
+
                     inputIntegerPartIn10NS += substringValue * Math.pow(getInputNumeralSystem(), inputIntegerPartString.length() - i - 1);
                 }
+                solutionPart1.addLine("");
+                solutionPart1.addLine(String.format(Locale.getDefault(), "Result is %d", inputIntegerPartIn10NS));
+                solutionParts.add(solutionPart1);
             }
 
-            // converting integer part in 10 numeric system to 10 result numeric system
+            // converting integer part in numeric system with base 10 to result numeric system
             if (inputIntegerPartIn10NS == 0 ) {
                 result = "0";
             } else if (getResultNumeralSystem() == 10) {
                 result = Integer.toString(inputIntegerPartIn10NS);
             } else {
+                SolutionPart solutionPart2 = new SolutionPart(String.format(Locale.getDefault(),"Converting integer part from numeric system with base 10 to numeric system with base %d:",
+                        getResultNumeralSystem()));
                 result = "";
                 while ((inputIntegerPartIn10NS >= getResultNumeralSystem())) {
+                    solutionPart2.addLine(String.format(Locale.getDefault(), "%d %% %d = %d (%s) result is (%s)%s",
+                            inputIntegerPartIn10NS,
+                            getResultNumeralSystem(),
+                            inputIntegerPartIn10NS % getResultNumeralSystem(),
+                            getDigitByValue(inputIntegerPartIn10NS % getResultNumeralSystem()),
+                            getDigitByValue(inputIntegerPartIn10NS % getResultNumeralSystem()),
+                            result));
+
                     result = getDigitByValue(inputIntegerPartIn10NS % getResultNumeralSystem()).concat(result);
                     inputIntegerPartIn10NS = inputIntegerPartIn10NS / getResultNumeralSystem();
                 }
                 result = getDigitByValue(inputIntegerPartIn10NS).concat(result);
+
+                solutionPart2.addLine("");
+                solutionPart2.addLine(String.format(Locale.getDefault(), "Result is %s", result));
+                solutionParts.add(solutionPart2);
             }
 
             if (input.contains(".")) {
                 // converting fractional part
-                // converting fractional part in input numeric system to 10 numeric system
+                // converting fractional part to numeric system with base 10
                 String inputFractionalPartString = input.split("\\.")[1];
                 double inputFractionalPartIn10NS;
 
                 if (getInputNumeralSystem() == 10) {
                     inputFractionalPartIn10NS = Double.parseDouble("0.".concat(inputFractionalPartString));
                 } else {
+                    solutionParts.add(new SolutionPart(String.format(Locale.getDefault(),"Converting fractional part from numeric system with base %d to numeric system with base 10:",
+                            getInputNumeralSystem())));
+
                     inputFractionalPartIn10NS = 0;
                     for (int i = 0; i < inputFractionalPartString.length(); i++) {
                         String substring = Character.toString(inputFractionalPartString.charAt(i));
@@ -172,10 +205,13 @@ public class Converter {
                     }
                 }
 
-                // converting fractional part in 10 numeric system to 10 result numeric system
+                // converting fractional part in numeric system with base 10 to result numeric system
                 if (getResultNumeralSystem() == 10) {
                     result = result.concat(Double.toString(inputFractionalPartIn10NS).substring(1));
                 } else {
+                    solutionParts.add(new SolutionPart(String.format(Locale.getDefault(),"Converting fractional part from numeric system with base 10 to numeric system with base %d:",
+                            getResultNumeralSystem())));
+
                     result = result.concat(".");
                     for (int i = 0; i < 6; i++) {
                         Log.d(tag, Double.toString(inputFractionalPartIn10NS * getResultNumeralSystem()));
@@ -222,5 +258,13 @@ public class Converter {
         if (1 < value && value < 37) {
             this.input_ns = value;
         }
+    }
+
+    public List<SolutionPart> getSolution() {
+        return solutionParts;
+    }
+
+    public void clearSolution() {
+        solutionParts.clear();
     }
 }
