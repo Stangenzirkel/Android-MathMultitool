@@ -1,5 +1,7 @@
 package stangenzirkel.mathmultitool;
 
+import android.app.Activity;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import stangenzirkel.mathmultitool.calculator.Calculator;
+import stangenzirkel.mathmultitool.usefulfunctions.UsefulFunctions;
 
 public class CalculatorFragment extends Fragment implements View.OnClickListener {
     private Calculator calculator = Calculator.getInstanse();
     private static final String tag = "CalculatorFragmentTag";
+    private static final String memoryKey = "memoryKey", expressionKey = "expressionKey";
 
     public CalculatorFragment() {}
 
@@ -29,6 +33,8 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_calculator, container, false);
+        loadBuffer();
+        loadExpression();
 
         root.findViewById(R.id.kl_3b).setVisibility(View.GONE);
         root.findViewById(R.id.kl_4b).setVisibility(View.GONE);
@@ -95,7 +101,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         // root.findViewById(R.id.btn_percent).setOnClickListener(this);
 
         TextView tv = root.findViewById(R.id.tv_calculator_expression);
-        tv.setText(calculator.getInputString());
+        tv.setText(calculator.getExpressionString());
 
         tv = root.findViewById(R.id.tv_calculator_result);
         tv.setText(calculator.getStringResult());
@@ -238,26 +244,32 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
             case R.id.btn_sin:
                 calculator.addOperator("sin");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_cos:
                 calculator.addOperator("cos");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_tan:
                 calculator.addOperator("tan");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_asin:
                 calculator.addOperator("asin");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_acos:
                 calculator.addOperator("acos");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_atan:
                 calculator.addOperator("atan");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_lg:
@@ -270,10 +282,12 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
             case R.id.btn_rtd:
                 calculator.addOperator("rtd");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_dtr:
                 calculator.addOperator("dtr");
+                calculator.addLeftBracket();
                 break;
 
             case R.id.btn_10exp:
@@ -295,13 +309,13 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 if (calculator.addToBuffer()) {
                     Toast.makeText(getContext(), "Result added to memory", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
 
             case R.id.btn_mminus:
                 if (calculator.subtractFromBuffer()) {
                     Toast.makeText(getContext(), "Result subtracted from memory", Toast.LENGTH_SHORT).show();
                 }
+                break;
 
             case R.id.btn_mr:
                 String string = Double.toString(calculator.getBuffer());
@@ -309,10 +323,11 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                     string = string.replace(".0", "");
                 }
 
+                calculator.clearAll();
                 for (String s: string.split("")) {
                     calculator.addExpressionPart(s);
                 }
-                Toast.makeText(getContext(), "Memory result", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Memory read", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_rad_deg: //TODO add deg/rad mods to calculator
@@ -328,9 +343,39 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         }
 
         TextView tv = getView().findViewById(R.id.tv_calculator_expression);
-        tv.setText(calculator.getInputString());
+        tv.setText(calculator.getExpressionString());
 
         tv = getView().findViewById(R.id.tv_calculator_result);
         tv.setText(calculator.getStringResult());
+
+        saveBuffer();
+        saveExpression();
     }
+
+    private void saveBuffer() {
+        String value = Double.toString(calculator.getBuffer());
+        Editor editor = getActivity().getPreferences(Activity.MODE_PRIVATE).edit();
+        editor.putString(memoryKey, value);
+        editor.apply();
+    }
+
+    private void loadBuffer() {
+        String value = getActivity().getPreferences(Activity.MODE_PRIVATE).getString(memoryKey, "0");
+        calculator.setBuffer(Double.parseDouble(value));
+    }
+
+    private void saveExpression() {
+        String value =  UsefulFunctions.joinString("|", calculator.getExpression());
+        Editor editor = getActivity().getPreferences(Activity.MODE_PRIVATE).edit();
+        editor.putString(expressionKey, value);
+        editor.apply();
+    }
+
+    private void loadExpression() {
+        String[] expressionParts = getActivity().getPreferences(Activity.MODE_PRIVATE).getString(expressionKey, "0").split("\\|");
+        for (String expressionPart: expressionParts) {
+            calculator.addExpressionPart(expressionPart);
+        }
+    }
+
 }

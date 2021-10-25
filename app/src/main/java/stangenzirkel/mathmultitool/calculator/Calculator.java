@@ -327,11 +327,11 @@ public class Calculator {
         }
     }
 
-    public String getStringM() {
-        return Double.toString(getBuffer());
+    public List<String> getExpression() {
+        return expressionParts;
     }
 
-    public String getInputString() {
+    public String getExpressionString() {
         if (expressionParts.size() == 0) {
             return "Enter here";
         }
