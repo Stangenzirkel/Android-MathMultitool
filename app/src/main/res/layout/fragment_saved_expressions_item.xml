@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cv_solution_part"
+    android:id="@+id/cv_expression"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
@@ -19,22 +19,22 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/card_header"
+            android:id="@+id/card_expression"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textColor="@color/gray_1"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/card_text"
+            android:id="@+id/card_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="TextView"
             android:textColor="@color/gray_1"
             android:textSize="16sp"
-            android:textStyle="italic" />
+            android:textStyle="normal" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

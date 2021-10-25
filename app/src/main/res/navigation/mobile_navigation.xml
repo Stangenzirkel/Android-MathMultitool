@@ -19,4 +19,9 @@
         android:name="stangenzirkel.mathmultitool.SolutionFragment"
         android:label="Solution"
         tools:layout="@layout/fragment_solution_item_list" />
+    <fragment
+        android:id="@+id/savedExpressionsFragment"
+        android:name="stangenzirkel.mathmultitool.SavedExpressionsFragment"
+        android:label="Saved expressions"
+        tools:layout="@layout/fragment_saved_expressions_item_list" />
 </navigation>

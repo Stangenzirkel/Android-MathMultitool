@@ -3,6 +3,7 @@ package stangenzirkel.mathmultitool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
@@ -17,15 +18,19 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import stangenzirkel.mathmultitool.calculator.Calculator;
 import stangenzirkel.mathmultitool.converter.Converter;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ConverterFragment.Callback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ConverterFragment.Callback, CalculatorFragment.Callback {
     NavController navController;
     private String tag = "MainActivityTag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        CalculatorDB calculatorDB = CalculatorDB.getInstance();
+        calculatorDB.setContext(this);
 
         setContentView(R.layout.activity_main);
         setSupportActionBar(findViewById(R.id.toolbar));
@@ -78,5 +83,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onConverterFragmentSolutionButtonClick() {
         navController.navigate(R.id.solutionFragment);
+    }
+
+    @Override
+    public void onCalculatorFragmentDBButtonClick() {
+        navController.navigate(R.id.savedExpressionsFragment);
     }
 }

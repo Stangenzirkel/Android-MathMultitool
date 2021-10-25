@@ -34,17 +34,19 @@ public class Converter {
         String capitalLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         if (string.length() != 1) {
+            Log.d(tag, "String len != 1; = " + string.length());
             return -1;
         }
 
         int result;
         if (digits.contains(string)) {
-            result = Integer.valueOf(string);
+            result = Integer.parseInt(string);
         } else if (lowercaseLetters.contains(string)) {
             result = lowercaseLetters.indexOf(string) + 10;
         } else if (capitalLetters.contains(string)) {
             result = capitalLetters.indexOf(string) + 10;
         } else {
+            Log.d(tag, "Digit doesn't exist");
             result = -1;
         }
 
@@ -66,16 +68,15 @@ public class Converter {
     }
 
     public boolean addString(String string) {
-        for (String partOfString: string.split("")) {
-            if (isDigit(partOfString)) {
-                numberChars.add(partOfString.toUpperCase());
-                Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
-            } else if ((string.equals(".") || string.equals(",")) && !numberChars.contains(".")) {
-                numberChars.add(".");
-                Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
-            } else {
-                return false;
-            }
+        if (isDigit(string)) {
+            numberChars.add(string.toUpperCase());
+            Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
+        } else if ((string.equals(".") || string.equals(",")) && !numberChars.contains(".")) {
+            numberChars.add(".");
+            Log.d(ConverterFragment.tag, "String added to converter input. String = ".concat(string));
+        } else {
+            Log.d(ConverterFragment.tag, "String not added to converter input. String = ".concat(string));
+            return false;
         }
 
         return true;

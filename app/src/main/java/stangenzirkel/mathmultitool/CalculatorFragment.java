@@ -1,20 +1,31 @@
 package stangenzirkel.mathmultitool;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
+
 import stangenzirkel.mathmultitool.calculator.Calculator;
+import stangenzirkel.mathmultitool.calculator.Expression;
 import stangenzirkel.mathmultitool.usefulfunctions.UsefulFunctions;
 
 public class CalculatorFragment extends Fragment implements View.OnClickListener {
@@ -24,15 +35,22 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
     public CalculatorFragment() {}
 
+    interface Callback {
+        void onCalculatorFragmentDBButtonClick();
+    }
+
     public static CalculatorFragment newInstance() {
         CalculatorFragment fragment = new CalculatorFragment();
         return fragment;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_calculator, container, false);
+        setHasOptionsMenu(true);
+
         loadBuffer();
         loadExpression();
 
@@ -109,6 +127,30 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.calculator_toolbar_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_exp_item:
+                addCurrentExpressionToDB();
+                break;
+
+            case R.id.show_saved_exp_item:
+                printBD();
+                if (getActivity() != null) {
+                    ((MainActivity) getActivity()).onCalculatorFragmentDBButtonClick();
+                }
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onClick(View v) {
         Button button = (Button) v;
         Log.d(tag, "Click on ".concat((String) button.getText()));
@@ -176,6 +218,8 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_result: case R.id.btn_resultb:
+                addCurrentExpressionToDB();
+                printBD();
                 String result = calculator.getStringResult();
                 if (result.endsWith(".0")) {
                     result = result.replace(".0", "");
@@ -365,9 +409,9 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     }
 
     private void saveExpression() {
-        String value =  UsefulFunctions.joinString("|", calculator.getExpression());
+        String expression =  UsefulFunctions.joinString("|", calculator.getExpression());
         Editor editor = getActivity().getPreferences(Activity.MODE_PRIVATE).edit();
-        editor.putString(expressionKey, value);
+        editor.putString(expressionKey, expression);
         editor.apply();
     }
 
@@ -376,6 +420,23 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         for (String expressionPart: expressionParts) {
             calculator.addExpressionPart(expressionPart);
         }
+    }
+
+    private void addCurrentExpressionToDB() {
+        long time = System.currentTimeMillis();
+        String[] expressionParts = new String[calculator.getExpression().size()];
+        calculator.getExpression().toArray(expressionParts);
+        String result = calculator.getStringResult();
+        Expression expression = new Expression(0, time, expressionParts, result);
+        CalculatorDB.getInstance().addExpression(expression);
+    }
+
+    private void printBD() {
+        Log.d(CalculatorDB.tag, "expressions in DB:");
+        for (Expression expression: CalculatorDB.getInstance().getExpressions()) {
+            Log.d(CalculatorDB.tag, expression.toString());
+        }
+
     }
 
 }

@@ -1,6 +1,5 @@
 package stangenzirkel.mathmultitool;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ public class SolutionRecyclerViewAdapter extends RecyclerView.Adapter<SolutionRe
 
         SolutionViewHolder(View itemView) {
             super(itemView);
-            cv = itemView.findViewById(R.id.cv);
+            cv = itemView.findViewById(R.id.cv_solution_part);
             headerTV = itemView.findViewById(R.id.card_header);
             bodyTV = itemView.findViewById(R.id.card_text);
         }

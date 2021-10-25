@@ -331,6 +331,17 @@ public class Calculator {
         return expressionParts;
     }
 
+    public static String expressionToString(Expression expression) {
+        String string = UsefulFunctions.joinString(expression.getExpressionParts());
+
+        return string
+                .replace("pi", "π")
+                .replace("root", "√")
+                .replace("inverse", "-")
+                .replace("rtd", "deg")
+                .replace("dtr", "rad");
+    }
+
     public String getExpressionString() {
         if (expressionParts.size() == 0) {
             return "Enter here";
