@@ -15,4 +15,5 @@
     <color name="toolbar">#2B2B2B</color>
     <color name="main_background">#464646</color>
     <color name="blue_1">#375FAF</color>
+    <color name="ghost">#00000000</color>
 </resources>
