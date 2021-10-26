@@ -1,6 +1,7 @@
 package stangenzirkel.mathmultitool;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import stangenzirkel.mathmultitool.converter.Converter;
 
 public class SavedExpressionsFragment extends Fragment {
+    RecyclerView recyclerView;
 
     public SavedExpressionsFragment() {
     }
@@ -41,14 +44,15 @@ public class SavedExpressionsFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            Log.d(CalculatorDB.tag, "2");
-            recyclerView.setAdapter(new ExpressionRecyclerViewAdapter(Arrays.asList(CalculatorDB.getInstance().getExpressions().clone())));
-        } else {
-            Log.d(CalculatorDB.tag, "3");
+            initializeAdapter();
         }
         return view;
+    }
+
+    protected void initializeAdapter(){
+        recyclerView.setAdapter(new ExpressionRecyclerViewAdapter(Arrays.asList(CalculatorDB.getInstance().getExpressions().clone()), this));
     }
 
 

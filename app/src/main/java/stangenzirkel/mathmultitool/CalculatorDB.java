@@ -2,6 +2,7 @@ package stangenzirkel.mathmultitool;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -64,5 +65,40 @@ public class CalculatorDB {
             Log.d(tag, expression.toString());
         }
         return expressions;
+    }
+
+    public Expression getExpression(int id) {
+        if (id != 0) {
+            String selection = "id = " + id;
+            Cursor c = new DBHelper(context).getWritableDatabase().query("mytable",
+                    null,
+                    selection,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "1");
+            if (c.moveToFirst()) {
+                int idColIndex = c.getColumnIndex("id");
+                int timeColIndex = c.getColumnIndex("time");
+                int expressionColIndex = c.getColumnIndex("expression");
+                int resultColIndex = c.getColumnIndex("result");
+
+                Expression expression = new Expression(c.getInt(idColIndex),
+                        c.getLong(timeColIndex),
+                        c.getString(expressionColIndex).split("\\|"),
+                        c.getString(resultColIndex));
+                c.close();
+                return expression;
+            }
+            c.close();
+        }
+        Log.d(tag, "row with id " + id + "not find");
+        return new Expression(0, 0, new String[0], "");
+    }
+
+    public void deleteExpression(int id) {
+        Log.d(tag, "Deleting expression " + id);
+        new DBHelper(context).getWritableDatabase().delete("expressions", "id = " + id, null);
     }
 }

@@ -35,10 +35,6 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
     public CalculatorFragment() {}
 
-    interface Callback {
-        void onCalculatorFragmentDBButtonClick();
-    }
-
     public static CalculatorFragment newInstance() {
         CalculatorFragment fragment = new CalculatorFragment();
         return fragment;
@@ -416,6 +412,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     }
 
     private void loadExpression() {
+        calculator.clearAll();
         String[] expressionParts = getActivity().getPreferences(Activity.MODE_PRIVATE).getString(expressionKey, "0").split("\\|");
         for (String expressionPart: expressionParts) {
             calculator.addExpressionPart(expressionPart);

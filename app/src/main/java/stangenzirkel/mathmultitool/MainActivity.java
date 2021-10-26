@@ -1,15 +1,15 @@
 package stangenzirkel.mathmultitool;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,9 +19,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import stangenzirkel.mathmultitool.calculator.Calculator;
-import stangenzirkel.mathmultitool.converter.Converter;
+import stangenzirkel.mathmultitool.calculator.Expression;
+import stangenzirkel.mathmultitool.usefulfunctions.UsefulFunctions;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ConverterFragment.Callback, CalculatorFragment.Callback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     NavController navController;
     private String tag = "MainActivityTag";
 
@@ -80,13 +81,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
     public void onConverterFragmentSolutionButtonClick() {
         navController.navigate(R.id.solutionFragment);
     }
 
-    @Override
     public void onCalculatorFragmentDBButtonClick() {
         navController.navigate(R.id.savedExpressionsFragment);
+    }
+
+    public void onExpressionCardClick() {
+        navController.navigate(R.id.calculatorFragment);
     }
 }
